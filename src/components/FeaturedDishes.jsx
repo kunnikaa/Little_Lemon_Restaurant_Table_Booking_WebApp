@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MENU_ITEMS } from '../data/menuItems';
+import { useCart } from '../context/CartContext';
 
-export default function FeaturedDishes({ onNavigateToMenu }) {
+export default function FeaturedDishes() {
   const [notification, setNotification] = useState('');
+  const { addToCart } = useCart();
 
-  // Get the 4 highlighted featured dishes
   const featuredItems = MENU_ITEMS.filter((item) => item.featured).slice(0, 4);
 
-  const handleOrder = (dishName) => {
-    setNotification(`"${dishName}" added to demonstration order!`);
-    setTimeout(() => setNotification(''), 4000);
+  const handleOrder = (dish) => {
+    addToCart(dish, 1);
+    setNotification(`Added "${dish.name}" to your pre-order cart!`);
+    setTimeout(() => setNotification(''), 3500);
   };
 
   return (
@@ -26,14 +29,13 @@ export default function FeaturedDishes({ onNavigateToMenu }) {
               Each dish is prepared daily using cold-pressed Greek oils, organic herbs, and Mediterranean delicacies.
             </p>
           </div>
-          <button
-            type="button"
+          <Link
+            to="/menu"
             className="btn btn-secondary"
-            onClick={() => onNavigateToMenu && onNavigateToMenu('menu')}
             aria-label="View our full online menu"
           >
-            Explore Complete Menu (16 Dishes) →
-          </button>
+            Explore Complete Menu ({MENU_ITEMS.length} Dishes) →
+          </Link>
         </div>
 
         {/* Live Notification */}
@@ -43,7 +45,7 @@ export default function FeaturedDishes({ onNavigateToMenu }) {
             aria-live="polite"
             className="live-toast-notification"
           >
-            ✓ {notification} (Demonstration preview)
+            ✓ {notification}
           </div>
         )}
 
@@ -51,7 +53,7 @@ export default function FeaturedDishes({ onNavigateToMenu }) {
         <div className="featured-grid">
           {featuredItems.map((dish) => (
             <article key={dish.id} className="featured-card">
-              <div className="featured-card-media">
+              <Link to={`/menu/${dish.id}`} className="featured-card-media" aria-label={`View details for ${dish.name}`}>
                 <img
                   src={dish.image}
                   alt={dish.alt}
@@ -61,22 +63,27 @@ export default function FeaturedDishes({ onNavigateToMenu }) {
                   loading="lazy"
                 />
                 <span className="featured-dietary-badge">{dish.dietary}</span>
-              </div>
+              </Link>
               <div className="featured-card-content">
                 <div className="featured-card-meta">
                   <span className="featured-category">{dish.category}</span>
                   <span className="featured-price">{dish.price}</span>
                 </div>
-                <h3 className="featured-dish-name">{dish.name}</h3>
+                <h3 className="featured-dish-name">
+                  <Link to={`/menu/${dish.id}`}>{dish.name}</Link>
+                </h3>
                 <p className="featured-dish-desc">{dish.description}</p>
                 <div className="featured-card-actions">
+                  <Link to={`/menu/${dish.id}`} className="view-details-link">
+                    Details →
+                  </Link>
                   <button
                     type="button"
                     className="order-delivery-btn"
-                    onClick={() => handleOrder(dish.name)}
-                    aria-label={`Order delivery for ${dish.name}`}
+                    onClick={() => handleOrder(dish)}
+                    aria-label={`Add ${dish.name} to cart`}
                   >
-                    Order a delivery <span aria-hidden="true">🛵</span>
+                    + Add to Cart 🛒
                   </button>
                 </div>
               </div>

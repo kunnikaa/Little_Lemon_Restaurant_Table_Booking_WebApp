@@ -1,30 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Hero({ onReserveClick, onMenuClick }) {
-  const handleReserve = (e) => {
-    e.preventDefault();
-    if (onReserveClick) {
-      onReserveClick();
-    } else {
-      const el = document.getElementById('reservations');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-        const firstInput = el.querySelector('input, select');
-        if (firstInput) firstInput.focus();
-      }
-    }
-  };
-
-  const handleMenu = (e) => {
-    e.preventDefault();
-    if (onMenuClick) {
-      onMenuClick();
-    } else {
-      const el = document.getElementById('menu');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+export default function Hero({ onReserveClick }) {
   return (
     <section id="home" className="hero-section" aria-labelledby="hero-heading">
       <div className="container">
@@ -40,26 +17,25 @@ export default function Hero({ onReserveClick, onMenuClick }) {
               herbs, and heartfelt Mediterranean hospitality in the heart of Illinois.
             </p>
             
-            {/* Action Buttons */}
+            {/* Multi-Page Navigation Actions */}
             <div className="hero-actions">
-              <a
-                href="#reservations"
+              <Link
+                to="/reservations"
                 className="btn btn-primary"
-                onClick={handleReserve}
+                onClick={onReserveClick}
                 id="hero-reserve-btn"
                 aria-label="Reserve a Table at Little Lemon"
               >
                 Reserve a Table
-              </a>
-              <a
-                href="#menu"
+              </Link>
+              <Link
+                to="/menu"
                 className="btn btn-outline-hero"
-                onClick={handleMenu}
                 id="hero-menu-btn"
                 aria-label="Explore Our Full Mediterranean Menu"
               >
-                Explore Our Menu
-              </a>
+                Explore Full Menu
+              </Link>
             </div>
 
             {/* Quick Highlights Strip */}

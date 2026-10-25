@@ -1,24 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Footer({ onNavigate }) {
-  const handleLinkClick = (e, sectionId) => {
-    e.preventDefault();
-    if (onNavigate) {
-      onNavigate(sectionId);
-    } else {
-      const el = document.getElementById(sectionId);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+export default function Footer() {
   return (
     <footer className="footer" role="contentinfo">
       <div className="container">
         <div className="footer-grid">
-          {/* Brand Info */}
+          {/* Brand Info with Logo */}
           <div className="footer-brand">
-            <h4>LITTLE LEMON</h4>
-            <p>
+            <img
+              src="/images/little-lemon-logo-cropped.png"
+              alt="Little Lemon Mediterranean Kitchen"
+              className="footer-logo-img"
+              width="180"
+              height="60"
+            />
+            <p style={{ marginTop: '1rem' }}>
               Traditional Mediterranean cuisine prepared with love, passion, and heritage.
               Serving Chicago since 2012.
             </p>
@@ -27,34 +24,24 @@ export default function Footer({ onNavigate }) {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Page Links */}
           <div className="footer-col">
             <h5>Navigation</h5>
             <ul className="footer-links">
               <li>
-                <a href="#home" onClick={(e) => handleLinkClick(e, 'home')}>
-                  Home
-                </a>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <a href="#about" onClick={(e) => handleLinkClick(e, 'about')}>
-                  About Us
-                </a>
+                <Link to="/about">About Us</Link>
               </li>
               <li>
-                <a href="#menu" onClick={(e) => handleLinkClick(e, 'menu')}>
-                  Menu Highlights
-                </a>
+                <Link to="/menu">Full Menu</Link>
               </li>
               <li>
-                <a href="#reservations" onClick={(e) => handleLinkClick(e, 'reservations')}>
-                  Reservations
-                </a>
+                <Link to="/reservations">Table Reservations</Link>
               </li>
               <li>
-                <a href="#menu" onClick={(e) => handleLinkClick(e, 'menu')}>
-                  Order Online
-                </a>
+                <Link to="/order">Order Online & Pre-Orders</Link>
               </li>
             </ul>
           </div>
@@ -92,7 +79,7 @@ export default function Footer({ onNavigate }) {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Little Lemon on Facebook (opens in a new window)"
+                  aria-label="Little Lemon on Facebook (opens in new tab)"
                 >
                   Facebook
                 </a>
@@ -102,7 +89,7 @@ export default function Footer({ onNavigate }) {
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Little Lemon on Instagram (opens in a new window)"
+                  aria-label="Little Lemon on Instagram (opens in new tab)"
                 >
                   Instagram
                 </a>
@@ -112,7 +99,7 @@ export default function Footer({ onNavigate }) {
                   href="https://tripadvisor.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Little Lemon on TripAdvisor (opens in a new window)"
+                  aria-label="Little Lemon on TripAdvisor (opens in new tab)"
                 >
                   TripAdvisor
                 </a>
@@ -124,10 +111,10 @@ export default function Footer({ onNavigate }) {
         {/* Footer Bottom */}
         <div className="footer-bottom">
           <p>
-            © {new Date().getFullYear()} Little Lemon Restaurant. All rights reserved.
+            © {new Date().getFullYear()} Little Lemon Mediterranean Kitchen. All rights reserved.
           </p>
           <p>
-            Developed for the Coursera Meta Front-End Developer Professional Certificate Capstone Project.
+            Coursera Meta Front-End Developer Professional Certificate Capstone Project.
           </p>
         </div>
       </div>

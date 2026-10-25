@@ -1,123 +1,136 @@
 import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
-export default function Header({ onNavigate }) {
+export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { cartCount } = useCart();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
-  const handleLinkClick = (e, sectionId) => {
-    e.preventDefault();
+  const closeMenu = () => {
     setIsMobileMenuOpen(false);
-
-    if (onNavigate) {
-      onNavigate(sectionId);
-    } else {
-      const target = document.getElementById(sectionId);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
   };
 
   return (
     <header className="header" role="banner">
       <div className="container header-container">
-        {/* Brand Logo & Wordmark */}
-        <a
-          href="#home"
+        {/* Brand Logo using the user's attached reference image */}
+        <Link
+          to="/"
           className="brand-logo"
-          onClick={(e) => handleLinkClick(e, 'home')}
-          aria-label="Little Lemon Restaurant - Return to Homepage"
+          onClick={closeMenu}
+          aria-label="Little Lemon Mediterranean Kitchen - Return to Home"
         >
-          <div className="brand-logo-icon" aria-hidden="true">
-            🍋
-          </div>
-          <div className="brand-logo-text">
-            <span className="brand-title">LITTLE LEMON</span>
-            <span className="brand-subtitle">MEDITERRANEAN • CHICAGO</span>
-          </div>
-        </a>
+          <img
+            src="/images/little-lemon-logo-cropped.png"
+            alt="Little Lemon Mediterranean Kitchen Logo"
+            className="brand-logo-img"
+            width="170"
+            height="58"
+          />
+        </Link>
 
-        {/* Mobile Hamburger Toggle */}
-        <button
-          type="button"
-          className="mobile-menu-btn"
-          aria-label="Toggle navigation menu"
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="primary-navigation"
-          onClick={toggleMobileMenu}
-        >
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
+        {/* Mobile Navigation Toggle */}
+        <div className="header-mobile-actions">
+          <Link
+            to="/order"
+            className="mobile-cart-btn"
+            aria-label={`Cart with ${cartCount} items`}
+          >
+            <span aria-hidden="true">🛒</span>
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </Link>
 
-        {/* Primary Navigation */}
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="primary-navigation"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+
+        {/* Primary Multi-Page Navigation */}
         <nav id="primary-navigation" aria-label="Main Navigation">
           <ul className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
             <li>
-              <a
-                href="#home"
-                className="nav-link active"
-                onClick={(e) => handleLinkClick(e, 'home')}
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={closeMenu}
               >
                 Home
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="#about"
-                className="nav-link"
-                onClick={(e) => handleLinkClick(e, 'about')}
+              <NavLink
+                to="/about"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={closeMenu}
               >
                 About
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="#featured"
-                className="nav-link"
-                onClick={(e) => handleLinkClick(e, 'featured')}
-              >
-                Specials
-              </a>
-            </li>
-            <li>
-              <a
-                href="#menu"
-                className="nav-link"
-                onClick={(e) => handleLinkClick(e, 'menu')}
+              <NavLink
+                to="/menu"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={closeMenu}
               >
                 Menu
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="#reservations"
-                className="nav-link"
-                onClick={(e) => handleLinkClick(e, 'reservations')}
+              <NavLink
+                to="/reservations"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={closeMenu}
               >
                 Reservations
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a
-                href="#menu"
-                className="nav-link"
-                onClick={(e) => handleLinkClick(e, 'menu')}
+              <NavLink
+                to="/order"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={closeMenu}
               >
                 Order Online
-              </a>
+              </NavLink>
             </li>
+
+            {/* Cart Icon Link */}
+            <li className="nav-cart-wrapper">
+              <NavLink
+                to="/order"
+                className="nav-cart-btn"
+                onClick={closeMenu}
+                aria-label={`Pre-Order Cart with ${cartCount} items`}
+              >
+                <span className="cart-icon" aria-hidden="true">🛒</span>
+                <span className="cart-label">Cart</span>
+                <span className="cart-badge" aria-label={`${cartCount} items in cart`}>
+                  {cartCount}
+                </span>
+              </NavLink>
+            </li>
+
+            {/* Book a Table Primary CTA */}
             <li>
-              <a
-                href="#reservations"
-                className="nav-cta btn btn-primary"
-                onClick={(e) => handleLinkClick(e, 'reservations')}
-                style={{ padding: '0.6rem 1.25rem', fontSize: '0.95rem' }}
+              <Link
+                to="/reservations"
+                className="btn btn-primary nav-cta-btn"
+                onClick={closeMenu}
               >
                 Book a Table
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

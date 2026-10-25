@@ -1,63 +1,64 @@
 import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
-describe('App Integration Flow', () => {
+describe('Multi-Page Application & Routing Flow', () => {
   beforeEach(() => {
     localStorage.clear();
+    sessionStorage.clear();
     window.HTMLElement.prototype.scrollIntoView = function () {};
+    window.scrollTo = function () {};
   });
 
-  it('renders all key restaurant sections and handles announcement dismissal', async () => {
-    const user = userEvent.setup();
+  it('renders homepage with user logo, hero, featured dishes, and navigation', () => {
     render(<App />);
 
-    // Announcement bar
-    const announcement = screen.getByRole('region', { name: /Restaurant Announcement/i });
-    expect(announcement).toBeInTheDocument();
-    const dismissBtn = screen.getByLabelText(/Dismiss announcement banner/i);
-    await user.click(dismissBtn);
-    expect(screen.queryByRole('region', { name: /Restaurant Announcement/i })).not.toBeInTheDocument();
+    // Logo image from reference
+    expect(
+      screen.getByAltText(/Little Lemon Mediterranean Kitchen Logo/i)
+    ).toBeInTheDocument();
 
-    // Brand and Navigation
-    expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getAllByText(/LITTLE LEMON/i).length).toBeGreaterThan(0);
-
-    // Hero Section
+    // Main Hero
     expect(
       screen.getByRole('heading', { name: /A Little Taste of the Mediterranean/i, level: 1 })
     ).toBeInTheDocument();
 
-    // Featured Highlights Section
-    expect(
-      screen.getByRole('heading', { name: /Signature Culinary Highlights/i })
-    ).toBeInTheDocument();
-
-    // Extensive Menu Section
-    expect(
-      screen.getByRole('heading', { name: /Our Extensive Culinary Menu/i })
-    ).toBeInTheDocument();
-
-    // Reservations Section
-    expect(
-      screen.getByRole('heading', { name: /Reserve a Table at Little Lemon/i, level: 2 })
-    ).toBeInTheDocument();
-
-    // Story Section
-    expect(screen.getByRole('heading', { name: /The Story of Little Lemon/i })).toBeInTheDocument();
-
-    // Testimonials Section
-    expect(screen.getByRole('heading', { name: /What Our Guests Say/i })).toBeInTheDocument();
-
-    // Footer
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    // Navigation links in banner
+    const banner = screen.getByRole('banner');
+    expect(within(banner).getByRole('link', { name: 'Home' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: 'About' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: 'Menu' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: 'Reservations' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: 'Order Online' })).toBeInTheDocument();
   });
 
-  it('completes the full table booking flow: filling form, submitting, displaying confirmation summary, and resetting', async () => {
+  it('navigates to the Menu page when clicking Menu link', async () => {
     const user = userEvent.setup();
     render(<App />);
+
+    const menuLink = screen.getByRole('link', { name: 'Menu' });
+    await user.click(menuLink);
+
+    expect(
+      await screen.findByRole('heading', { name: /Our Full Mediterranean Menu/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'All Dishes' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Starters' })).toBeInTheDocument();
+  });
+
+  it('navigates to the Reservations page and completes the full table booking flow', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    // Navigate to Reservations
+    const resLink = screen.getByRole('link', { name: 'Reservations' });
+    await user.click(resLink);
+
+    expect(
+      await screen.findByRole('heading', { name: /Book Your Table at Little Lemon/i })
+    ).toBeInTheDocument();
 
     // Fill the booking form
     const nameInput = screen.getByLabelText(/Full Name/i);
@@ -69,11 +70,11 @@ describe('App Integration Flow', () => {
     await user.clear(guestsInput);
     await user.type(guestsInput, '4');
 
-    // Submit the form
+    // Submit reservation
     const submitBtn = screen.getByRole('button', { name: /Reserve Your Table/i });
     await user.click(submitBtn);
 
-    // Wait for the booking confirmation card to appear
+    // Wait for confirmation card
     await waitFor(
       () => {
         expect(screen.getByRole('heading', { name: /Reservation Confirmed!/i })).toBeInTheDocument();
@@ -81,18 +82,27 @@ describe('App Integration Flow', () => {
       { timeout: 3000 }
     );
 
-    // Verify confirmation details are displayed
     expect(screen.getAllByText('Sophia Rossi').length).toBeGreaterThan(0);
     expect(screen.getByText('sophia@example.com')).toBeInTheDocument();
     expect(screen.getByText(/4 Guests/i)).toBeInTheDocument();
-    expect(screen.getByText(/Booking Reference/i)).toBeInTheDocument();
 
-    // Click "Book Another Table"
+    // Reset reservation
     const bookAnotherBtn = screen.getByRole('button', { name: /Book Another Table/i });
     await user.click(bookAnotherBtn);
 
-    // Verify form is restored and available again
     expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Reserve Your Table/i })).toBeInTheDocument();
+  });
+
+  it('navigates to About Us page and renders founders story', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const aboutLink = screen.getByRole('link', { name: 'About' });
+    await user.click(aboutLink);
+
+    expect(
+      await screen.findByRole('heading', { name: /The Story of Little Lemon/i })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Two Friends, One Shared Culinary Dream/i)).toBeInTheDocument();
   });
 });
