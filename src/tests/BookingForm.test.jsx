@@ -231,7 +231,7 @@ describe('BookingForm Component', () => {
     await user.click(browseBtn);
 
     // Modal should be open with menu categories and search
-    expect(screen.getByRole('dialog', { name: /Browse Full Menu/i })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: /Choose Your Dishes/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Search dishes/i)).toBeInTheDocument();
 
     // Add Classic Greek Village Salad to pre-order
