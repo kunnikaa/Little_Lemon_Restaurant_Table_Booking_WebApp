@@ -1,16 +1,20 @@
-# Little Lemon Restaurant — Table Booking Web Application
+# Little Lemon Restaurant — Modern Mediterranean Editorial Web Application
 
 ![Little Lemon Hero](public/images/hero.jpg)
 
 A modern, responsive, accessible React web application for **Little Lemon**, a Mediterranean family-owned restaurant located in Chicago. Developed for the **Coursera Meta Front-End Developer Professional Certificate Capstone Project**.
+
+Visual Theme: **“Modern Mediterranean Editorial — The Little Lemon Experience.”**
 
 ---
 
 ## 📋 Table of Contents
 
 - [Project Overview](#project-overview)
+- [Visual Identity & Creative Theme](#visual-identity--creative-theme)
 - [Key Features](#key-features)
-- [Design & UI/UX](#design--uiux)
+- [Extensive Culinary Menu](#extensive-culinary-menu)
+- [Table Reservation Experience (Core)](#table-reservation-experience-core)
 - [Accessibility (a11y)](#accessibility-a11y)
 - [Technical Architecture](#technical-architecture)
 - [API Integration & State Management](#api-integration--state-management)
@@ -21,8 +25,8 @@ A modern, responsive, accessible React web application for **Little Lemon**, a M
   - [Running the Development Server](#running-the-development-server)
   - [Running Automated Unit Tests](#running-automated-unit-tests)
   - [Building for Production](#building-for-production)
-- [Unit Testing Suite](#unit-testing-suite)
-- [Coursera Peer-Review Rubric Verification](#coursera-peer-review-rubric-verification)
+- [Automated Testing Suite (28 Tests)](#automated-testing-suite-28-tests)
+- [Coursera Peer-Review Rubric Checklist](#coursera-peer-review-rubric-checklist)
 - [Known Limitations & Disclaimers](#known-limitations--disclaimers)
 - [License & Acknowledgments](#license--acknowledgments)
 
@@ -30,87 +34,86 @@ A modern, responsive, accessible React web application for **Little Lemon**, a M
 
 ## 🌟 Project Overview
 
-Little Lemon is a family-owned Mediterranean restaurant focused on traditional recipes served with a modern twist. This web application provides an intuitive online table reservation experience for customers, alongside an authentic Mediterranean brand presence featuring chef highlights, customer testimonials, and weekly menu specials.
+Little Lemon is an authentic Mediterranean bistro in downtown Chicago, founded by lifelong friends Mario and Adrian. The website balances editorial elegance with practical utility, featuring an extensive 16-dish culinary menu with category tabs and real-time search, signature culinary highlights, and a comprehensive table booking application powered by dynamic availability algorithms and client-side validation.
+
+---
+
+## 🎨 Visual Identity & Creative Theme
+
+Designed under the **“Modern Mediterranean Editorial”** aesthetic:
+
+- **Color Palette**:
+  - Primary Lemon Yellow: `#F4CE14`
+  - Deep Olive Green: `#495E57`
+  - Dark Forest Green: `#344E41`
+  - Warm Cream: `#F8F5ED`
+  - Soft Off-White: `#FFFFFF`
+  - Charcoal: `#252525`
+  - Muted Sage: `#DDE5D8`
+  - Warm Neutral Gray: `#77736B`
+  - Warm Peach Accent: `#EE9972`
+- **Typography**:
+  - Headlines: `Markazi Text` (Georgia serif fallback)
+  - UI, Forms, Body: `Karla` (system-ui fallback)
+- **Imagery**: High-resolution Mediterranean food photography, grilled dishes, pastas, mezze platters, lemon desserts, and authentic kitchen documentary photos of the founders.
 
 ---
 
 ## ✨ Key Features
 
-1. **Interactive Table Booking Form**:
-   - Customer Full Name and Email validation.
-   - Optional contact Phone Number validation.
-   - Date picker with past-date prohibition (minimum date is always today).
-   - Dynamic time-slot calculation via `fetchAPI(date)` that recalculates available slots upon date change.
-   - Guest count selector (1 to 10 guests) with inline validation.
-   - Occasion selector (*Casual Dining, Birthday, Anniversary, Engagement, Business Meal*).
-   - Interactive seating preference selector (*Main Dining Room, Garden Patio, Chef's Counter*).
-   - Optional special dietary requests and notes.
-2. **Instant Booking Confirmation**:
-   - Comprehensive summary display including guest name, date, time, party size, occasion, and seating area.
-   - Generated unique demonstration reservation reference ID (e.g., `LL-DEMO-XXXXX`).
-   - "Book Another Table" reset button to seamlessly book additional tables.
-3. **Weekly Menu Specials**:
-   - Authentic dishes: Greek Salad, Bruschetta, and Lemon Dessert.
-   - High-resolution imagery, pricing, descriptions, and interactive delivery order preview.
-4. **Restaurant Story**:
-   - The culinary journey of founders Mario and Adrian in Chicago.
-5. **Customer Social Proof**:
-   - Testimonials and verified diner reviews with star ratings.
-
----
-
-## 🎨 Design & UI/UX
-
-The visual identity is inspired by the Mediterranean coast and the official Little Lemon design specifications:
-
-- **Primary Colors**:
-  - Mediterranean Olive Green: `#495E57`
-  - Primary Lemon Yellow: `#F4CE14`
-- **Secondary & Accent Colors**:
-  - Warm Peach: `#EE9972`
-  - Desert Sand / Cream: `#FBDABB`
-  - Neutral Charcoal: `#333333`
-  - Warm Surface Off-White: `#FDFBF7`
-- **Typography**:
-  - Headings: `Markazi Text` (Georgia serif fallback)
-  - Body & UI: `Karla` (system-ui fallback)
-- **Responsive Layout**:
-  - Fully fluid design catering from mobile screens (320px+) to tablets and ultra-wide desktops without horizontal overflow.
+1. **Top Announcement Bar**:
+   - Dismissible banner highlighting seasonal specials and reservation availability.
+2. **Responsive Editorial Header**:
+   - Polished brand wordmark, quick links (*Home, About, Specials, Menu, Reservations, Order Online*), mobile drawer navigation, and prominent "Book a Table" button.
+3. **Hero Section**:
+   - Headline: *"A Little Taste of the Mediterranean"*.
+   - Call-to-action buttons for table reservations and menu exploration.
+   - Highlights strip (*Fresh Organic Herbs, Imported Amalfi Citrus, Outdoor Garden Patio*).
+4. **Signature Culinary Highlights (Featured Dishes)**:
+   - Top 4 signature creations with high visual emphasis and order delivery actions.
+5. **Extensive Culinary Menu**:
+   - 16 demonstration dishes across 7 courses (*Starters, Salads, Mains, Pasta, Specials, Desserts, Drinks*).
+   - Real-time category filter tabs (*All, Starters, Salads, Mains, Pasta, Specials, Desserts, Drinks*).
+   - Instant search filter by ingredient or title.
+   - Dietary badges (*Vegetarian, Vegan, Gluten-Free, Seafood, Chef's Signature*).
+   - Interactive order delivery preview with toast notifications.
+6. **Story Section (About)**:
+   - Mario and Adrian's generational culinary heritage in Chicago.
+7. **Social Proof & Reviews**:
+   - Testimonials with verified diner badges and star ratings.
+8. **Table Reservation System (Core Feature)**:
+   - Full Name, Email, Phone, Date, Time, Guests, Occasion, Seating Area, and Special Requests.
+   - Dynamic available times via `fetchAPI(date)` and `useReducer`.
+   - Past-date prevention and comprehensive validation.
+   - Instant booking confirmation with reference ID and reset option.
 
 ---
 
 ## ♿ Accessibility (a11y)
 
-Built from the ground up adhering to **WCAG 2.1 AA** standards:
+Built strictly adhering to **WCAG 2.1 AA** standards:
 
-- **Semantic HTML5**: Native landmarks (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`).
-- **Form Controls & Labels**: Every input, select, and textarea is explicitly bound to a visible `<label>` via matching `id` and `for` / `htmlFor` attributes (e.g., `res-date`, `res-time`, `guests`, `occasion`).
-- **Accessible Validation & Feedback**:
-  - `aria-required="true"` on mandatory form fields.
-  - `aria-invalid` dynamically toggled based on validation state.
-  - `aria-describedby` links inputs to their respective inline error messages.
-  - Live regions (`role="alert"` and `aria-live="polite"`) for real-time announcements.
+- **Semantic Landmarks**: `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`.
+- **Form Controls & Labels**: Explicit label bindings using `htmlFor` and `id` (`res-date`, `res-time`, `guests`, `occasion`, `full-name`, `email`).
+- **ARIA Attributes**: `aria-required="true"`, `aria-invalid`, `aria-describedby` linking error paragraphs, `role="alert"`, `aria-live="polite"`.
 - **Keyboard Navigation**:
-  - Skip-to-content link (`.skip-link`) allows keyboard users to bypass navigation.
-  - High-visibility focus indicators (`:focus-visible`) across all interactive elements.
-  - Autofocus shift to first invalid input upon form rejection.
-- **Images**: All informative images include descriptive `alt` text; decorative icons include `aria-hidden="true"`.
-- **Contrast**: Text contrast ratios meet or exceed 4.5:1 for standard text and 3:1 for large text.
+  - Skip link (`.skip-link`) allows keyboard users to jump straight to `#main-content`.
+  - Prominent `:focus-visible` outline rings on all interactive elements.
+  - Tablist/Tab navigation for menu categories.
+- **Color Contrast**: All text satisfies or exceeds the 4.5:1 minimum contrast ratio requirement.
 
 ---
 
 ## 🏗 Technical Architecture
 
-- **Frontend Framework**: React 19 (Functional Components & Hooks).
-- **Bundler & Dev Server**: Vite 8.
-- **Testing Framework**: Vitest + React Testing Library (RTL) + `@testing-library/jest-dom` + `jsdom`.
-- **Styling**: Vanilla CSS3 Custom Properties (Design Tokens), Flexbox, CSS Grid.
+- **React 19**: Modern functional components and hooks (`useState`, `useReducer`, `useEffect`).
+- **Vite 8**: Ultra-fast build tool and development server.
+- **Vitest & React Testing Library (RTL)**: Full automated test suite with `@testing-library/jest-dom` and `jsdom`.
+- **Styling**: Pure CSS3 with CSS Custom Properties, CSS Grid, Flexbox, and fluid typography.
 
 ---
 
 ## 🔌 API Integration & State Management
-
-The application adheres directly to the Coursera Meta Front-End Capstone specification:
 
 ### 1. `availableTimes` State & Reducer
 Managed in [App.jsx](src/App.jsx) via `useReducer`:
@@ -133,37 +136,49 @@ Implemented in [src/utils/bookingApi.js](src/utils/bookingApi.js):
 ```text
 Little_Lemon_Restaurant_Table_Booking_WebApp/
 ├── public/
+│   ├── favicon.svg                       # Brand lemon icon
 │   └── images/
-│       ├── hero.jpg
-│       ├── greek-salad.jpg
-│       ├── bruschetta.jpg
-│       ├── lemon-dessert.jpg
-│       └── mario-and-adrian.jpg
+│       ├── hero.jpg                      # Gourmet Mediterranean dish
+│       ├── greek-salad.jpg               # Classic Greek Salad
+│       ├── bruschetta.jpg                # Artisan Bruschetta
+│       ├── lemon-dessert.jpg             # Traditional Lemon Dessert
+│       ├── mario-and-adrian.jpg          # Chefs Mario & Adrian in kitchen
+│       ├── mediterranean-pasta.jpg       # Lemon Garlic Prawn Linguine
+│       ├── mezze-platter.jpg             # Santorini Mezze Platter
+│       ├── lamb-chops.jpg                # Herb-Crusted Lamb Chops
+│       └── lemon-spritz.jpg              # Limoncello Coastal Spritz
 ├── src/
 │   ├── components/
-│   │   ├── Header.jsx              # Responsive header & accessible navigation
-│   │   ├── Hero.jsx                # Brand hero banner with CTA button
-│   │   ├── MenuHighlights.jsx      # Specials cards & delivery order preview
-│   │   ├── About.jsx               # Restaurant background & Mario/Adrian story
-│   │   ├── Testimonials.jsx        # Customer reviews and ratings
-│   │   ├── BookingForm.jsx         # Accessible table reservation form
-│   │   ├── BookingConfirmation.jsx # Detailed reservation summary card
-│   │   └── Footer.jsx              # Brand info, hours, links & disclaimer
+│   │   ├── AnnouncementBar.jsx           # Top seasonal notice with dismiss
+│   │   ├── Header.jsx                    # Header & responsive mobile drawer
+│   │   ├── Hero.jsx                      # Editorial hero with dual CTAs
+│   │   ├── FeaturedDishes.jsx            # 4 highlighted chef specials
+│   │   ├── MenuSection.jsx               # Extensive menu with category tabs & search
+│   │   ├── MenuCard.jsx                  # Individual dish card
+│   │   ├── About.jsx                     # Restaurant history & chef story
+│   │   ├── Testimonials.jsx              # Guest reviews with star ratings
+│   │   ├── BookingForm.jsx               # Table reservation form with validation
+│   │   ├── BookingConfirmation.jsx       # Detailed reservation receipt card
+│   │   └── Footer.jsx                    # Editorial footer with hours & links
+│   ├── data/
+│   │   └── menuItems.js                  # 16 dishes across 7 categories
 │   ├── utils/
-│   │   ├── bookingApi.js           # fetchAPI & submitAPI implementation
-│   │   └── bookingUtils.js         # Reducer, validation logic, date helpers
+│   │   ├── bookingApi.js                 # Coursera fetchAPI & submitAPI
+│   │   └── bookingUtils.js               # Reducer, validation, date helpers
 │   ├── tests/
-│   │   ├── bookingUtils.test.js    # Unit tests for reducer, api & validation
-│   │   ├── BookingForm.test.jsx    # Unit tests for BookingForm component
-│   │   └── App.test.jsx            # Full end-to-end integration tests
-│   ├── setupTests.js               # Jest-DOM matchers configuration
-│   ├── index.css                   # Global design tokens and styles
-│   ├── App.jsx                     # Root component with state management
-│   └── main.jsx                    # React entrypoint
-├── index.html                      # HTML5 template with Google Fonts & metadata
-├── package.json                    # Project dependencies and test scripts
-├── vite.config.js                  # Vite & Vitest configuration
-└── README.md                       # Complete documentation
+│   │   ├── bookingUtils.test.js          # Tests for reducer, api & validation
+│   │   ├── MenuSection.test.jsx          # Tests for menu category tabs & search
+│   │   ├── BookingForm.test.jsx          # Tests for form controls & validation
+│   │   └── App.test.jsx                  # End-to-end integration tests
+│   ├── setupTests.js                     # Testing environment configuration
+│   ├── index.css                         # Modern Mediterranean Editorial theme
+│   ├── App.jsx                           # Root component with state management
+│   └── main.jsx                          # React application entrypoint
+├── index.html                            # HTML template with metadata & Google Fonts
+├── package.json                          # Scripts & dependencies
+├── vite.config.js                        # Vite and Vitest configuration
+├── .gitignore                            # Excludes node_modules, dist, logs
+└── README.md                             # Comprehensive project documentation
 ```
 
 ---
@@ -222,39 +237,40 @@ npm run preview
 
 ---
 
-## 🧪 Unit Testing Suite
+## 🧪 Automated Testing Suite (28 Tests)
 
-The project includes **23 automated tests** across 3 test suites:
+The project includes **28 automated tests** across 4 test suites:
 
-| Test File | Coverage / Tested Behaviors |
-| :--- | :--- |
-| **`bookingUtils.test.js`** | `initializeTimes` non-empty slots, `updateTimes` reducer date changes, deterministic `fetchAPI`, `submitAPI` validation, `validateBookingForm` edge cases (email regex, past dates, guest limits 1–10), date formatting helpers. |
-| **`BookingForm.test.jsx`** | All required form labels rendered, HTML5 validation attributes (`res-date`, `res-time`, `guests`, `occasion`), `dispatchTimes` called on date change, inline error messages on invalid submit, submit button disabled while submitting. |
-| **`App.test.jsx`** | End-to-end rendering of all page landmarks, complete table reservation flow (filling form, submitting, displaying confirmation summary), and resetting form via "Book Another Table". |
+| Test File | Tests | Coverage / Tested Behaviors |
+| :--- | :---: | :--- |
+| **`bookingUtils.test.js`** | 14 | `initializeTimes` non-empty slots, `updateTimes` reducer date changes, deterministic `fetchAPI`, `submitAPI` validation, `validateBookingForm` edge cases (email regex, past dates, guest limits 1–10), date formatting helpers. |
+| **`MenuSection.test.jsx`** | 5 | Category tabs rendering, dynamic filtering by category, search filtering by keyword, empty state when no items match, delivery toast notification on click. |
+| **`BookingForm.test.jsx`** | 7 | All required form labels rendered, HTML5 validation attributes (`res-date`, `res-time`, `guests`, `occasion`), `dispatchTimes` called on date change, inline error messages on invalid submit, submit button disabled while submitting. |
+| **`App.test.jsx`** | 2 | End-to-end rendering of all page landmarks, announcement bar dismissal, complete table reservation flow (filling form, submitting, displaying confirmation summary), and resetting form via "Book Another Table". |
 
 ---
 
-## 📑 Coursera Peer-Review Rubric Verification
+## 📑 Coursera Peer-Review Rubric Checklist
 
-| Rubric Criterion | Implementation Verification |
-| :--- | :--- |
-| **1. UI/UX Design** | High-fidelity Mediterranean color scheme, typography (`Markazi Text` + `Karla`), professional restaurant photography, and smooth interactions. |
-| **2. Semantic Elements** | Valid HTML5 landmarks: `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`, `<form>`. |
-| **3. Booking Form Fields** | Name, Email, Phone, Date (`#res-date`), Time (`#res-time`), Guests (`#guests`), Occasion (`#occasion`), Seating preferences, Special requests. |
-| **4. Available Times Reducer** | `useReducer` with `initializeTimes` and `updateTimes` dynamically tied to `fetchAPI(date)`. |
-| **5. Form Validation** | Client-side validation prevents empty submits, validates email format, blocks past dates, and enforces guest limits (1–10). |
-| **6. Confirmation Display** | Shows complete reservation summary with guest name, date, time, guests, occasion, and demo reference ID. |
-| **7. Reset Option** | "Book Another Table" button resets the state cleanly and allows making subsequent reservations. |
-| **8. Accessibility** | Fully labelled inputs (`htmlFor`), `aria-required`, `aria-invalid`, `aria-describedby`, visible focus rings, and skip link. |
-| **9. Unit Tests** | Automated test suite verifying reducer, API, form validation, and component flows. |
-| **10. Git & README** | Clean repository structure, detailed documentation, and setup instructions. |
+| Rubric Criterion | Status | Verification Detail |
+| :--- | :---: | :--- |
+| **1. UI/UX Design** | **VERIFIED** | Modern Mediterranean Editorial theme, typography (`Markazi Text` + `Karla`), professional photography, and responsive layouts. |
+| **2. Semantic Elements** | **VERIFIED** | HTML5 landmarks: `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`, `<form>`. |
+| **3. Booking Form Fields** | **VERIFIED** | Name, Email, Phone, Date (`#res-date`), Time (`#res-time`), Guests (`#guests`), Occasion (`#occasion`), Seating preferences, Special requests. |
+| **4. Available Times Reducer** | **VERIFIED** | `useReducer(updateTimes, undefined, initializeTimes)` with dynamic time recalculation on date change. |
+| **5. Form Validation** | **VERIFIED** | Validates empty fields, email format, past dates, guest limits (1–10) with inline error messages. |
+| **6. Confirmation Display** | **VERIFIED** | Displays booking details with unique reference ID. |
+| **7. Reset Option** | **VERIFIED** | "Book Another Table" button restores the form cleanly. |
+| **8. Accessibility** | **VERIFIED** | Visible labels (`htmlFor`), ARIA attributes, skip link, visible focus rings, image `alt` tags. |
+| **9. Unit Tests** | **VERIFIED** | 28 automated tests covering reducer, validation, menu filtering, form component, and integration flow. |
+| **10. Git & README** | **VERIFIED** | Clean git history; `README.md` includes setup commands, architecture, and feature descriptions. |
 
 ---
 
 ## ⚠️ Known Limitations & Disclaimers
 
-- **Frontend Demonstration**: This application is a frontend demonstration capstone project. Submitted table reservations are stored locally in the browser (`localStorage`) and do not connect to a live restaurant database or payment gateway.
-- **Course API**: The API utility implements the deterministic algorithm provided in the Meta Front-End Capstone.
+- **Frontend Demonstration**: As specified for the Coursera Meta Front-End Capstone, submitted reservations are saved to demonstration local storage (`localStorage`) and do not connect to a live restaurant database or payment gateway.
+- **Informational Pricing**: Menu prices and delivery buttons are for demonstration preview and do not process live monetary payments.
 
 ---
 

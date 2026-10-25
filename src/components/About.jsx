@@ -7,34 +7,57 @@ export default function About() {
         <div className="about-grid">
           {/* About Text Content */}
           <div className="about-content">
-            <h2 id="about-heading">Little Lemon</h2>
-            <p className="about-location">Chicago</p>
+            <span className="editorial-subtitle">OUR CULINARY HERITAGE</span>
+            <h2 id="about-heading">The Story of Little Lemon</h2>
+            <p className="about-location">Founded by Mario & Adrian • Chicago</p>
+            
             <p className="about-text">
-              Little Lemon was founded in 2012 by two lifelong friends, Mario and Adrian.
-              Growing up in seaside Mediterranean villages, both chefs spent their childhoods
-              learning authentic culinary secrets passed down through generations.
+              Little Lemon was born from a shared Mediterranean childhood. Growing up in sun-drenched
+              coastal towns, Mario and Adrian were immersed in kitchens where olive oil flowed like
+              liquid gold, lemons were plucked straight from hillside groves, and family dinners lasted
+              well into the twilight hours.
             </p>
             <p className="about-text">
-              After moving to Chicago, they realized that authentic Mediterranean food—rooted in
-              virgin olive oils, garden herbs, fresh seafood, and slow-cooked roasts—was hard to find
-              in the heart of the Midwest.
+              When they reunited in Chicago, they saw an opportunity to bring those honest, sun-soaked
+              flavors to the Midwest. Rather than following cookie-cutter culinary trends, they built
+              Little Lemon around generational Mediterranean principles: whole seasonal ingredients,
+              charcoal embers, fragrant herbs, and slow-braised sauces.
             </p>
             <p className="about-text">
-              Together, they built Little Lemon to combine centuries-old family recipes with contemporary
-              techniques. Every meal is a celebration of warmth, hospitality, and unforgettable flavor.
+              Today, Little Lemon stands as a welcoming gathering place where friends and families
+              come together to celebrate life's moments over generous shared tables.
             </p>
+
+            {/* Chef signature pills */}
+            <div className="about-chef-pills">
+              <div className="chef-pill">
+                <strong>Mario</strong>
+                <span>Head Chef & Pasta Specialist</span>
+              </div>
+              <div className="chef-pill">
+                <strong>Adrian</strong>
+                <span>Culinary Director & Wine Sommelier</span>
+              </div>
+            </div>
           </div>
 
-          {/* About Image */}
+          {/* About Image with Editorial Frame */}
           <div className="about-image-wrapper">
-            <img
-              src="/images/mario-and-adrian.jpg"
-              alt="Mario and Adrian, founders and head chefs of Little Lemon Chicago, happily cooking in the open kitchen"
-              className="about-image"
-              width="500"
-              height="380"
-              loading="lazy"
-            />
+            <div className="about-image-frame">
+              <img
+                src="/images/mario-and-adrian.jpg"
+                alt="Mario and Adrian, founders and head chefs of Little Lemon Chicago, happily cooking in the open kitchen"
+                className="about-image"
+                width="500"
+                height="420"
+                loading="lazy"
+              />
+              <div className="about-floating-quote">
+                <span className="quote-mark" aria-hidden="true">“</span>
+                <p>Real Mediterranean cooking is never rushed. It is shared with warmth and genuine heart.</p>
+                <cite>— Mario & Adrian</cite>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -24,12 +24,12 @@ export default function Header({ onNavigate }) {
   return (
     <header className="header" role="banner">
       <div className="container header-container">
-        {/* Brand Logo */}
+        {/* Brand Logo & Wordmark */}
         <a
           href="#home"
           className="brand-logo"
           onClick={(e) => handleLinkClick(e, 'home')}
-          aria-label="Little Lemon Restaurant Home"
+          aria-label="Little Lemon Restaurant - Return to Homepage"
         >
           <div className="brand-logo-icon" aria-hidden="true">
             🍋
@@ -40,7 +40,7 @@ export default function Header({ onNavigate }) {
           </div>
         </a>
 
-        {/* Mobile Hamburger Toggle Button */}
+        {/* Mobile Hamburger Toggle */}
         <button
           type="button"
           className="mobile-menu-btn"
@@ -52,7 +52,7 @@ export default function Header({ onNavigate }) {
           {isMobileMenuOpen ? '✕' : '☰'}
         </button>
 
-        {/* Primary Navigation Menu */}
+        {/* Primary Navigation */}
         <nav id="primary-navigation" aria-label="Main Navigation">
           <ul className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
             <li>
@@ -75,6 +75,15 @@ export default function Header({ onNavigate }) {
             </li>
             <li>
               <a
+                href="#featured"
+                className="nav-link"
+                onClick={(e) => handleLinkClick(e, 'featured')}
+              >
+                Specials
+              </a>
+            </li>
+            <li>
+              <a
                 href="#menu"
                 className="nav-link"
                 onClick={(e) => handleLinkClick(e, 'menu')}
@@ -85,7 +94,7 @@ export default function Header({ onNavigate }) {
             <li>
               <a
                 href="#reservations"
-                className="nav-link nav-cta"
+                className="nav-link"
                 onClick={(e) => handleLinkClick(e, 'reservations')}
               >
                 Reservations
@@ -93,11 +102,21 @@ export default function Header({ onNavigate }) {
             </li>
             <li>
               <a
-                href="#order-online"
+                href="#menu"
                 className="nav-link"
                 onClick={(e) => handleLinkClick(e, 'menu')}
               >
                 Order Online
+              </a>
+            </li>
+            <li>
+              <a
+                href="#reservations"
+                className="nav-cta btn btn-primary"
+                onClick={(e) => handleLinkClick(e, 'reservations')}
+                style={{ padding: '0.6rem 1.25rem', fontSize: '0.95rem' }}
+              >
+                Book a Table
               </a>
             </li>
           </ul>

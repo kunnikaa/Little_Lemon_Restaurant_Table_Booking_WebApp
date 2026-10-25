@@ -1,17 +1,27 @@
 import React from 'react';
 
-export default function Hero({ onReserveClick }) {
-  const handleCtaClick = (e) => {
+export default function Hero({ onReserveClick, onMenuClick }) {
+  const handleReserve = (e) => {
     e.preventDefault();
     if (onReserveClick) {
       onReserveClick();
     } else {
-      const section = document.getElementById('reservations');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-        const firstInput = section.querySelector('input, select');
+      const el = document.getElementById('reservations');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        const firstInput = el.querySelector('input, select');
         if (firstInput) firstInput.focus();
       }
+    }
+  };
+
+  const handleMenu = (e) => {
+    e.preventDefault();
+    if (onMenuClick) {
+      onMenuClick();
+    } else {
+      const el = document.getElementById('menu');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -21,34 +31,70 @@ export default function Hero({ onReserveClick }) {
         <div className="hero-grid">
           {/* Hero Content */}
           <div className="hero-content">
-            <h1 id="hero-heading">Little Lemon</h1>
-            <p className="hero-location">Chicago</p>
+            <span className="hero-tagline">EST. 2012 • DOWNTOWN CHICAGO</span>
+            <h1 id="hero-heading">A Little Taste of the Mediterranean</h1>
+            <p className="hero-location">Little Lemon • Chicago</p>
             <p className="hero-description">
-              We are a family-owned Mediterranean restaurant, focused on traditional recipes
-              served with a modern twist. Experience vibrant flavors, authentic ingredients,
-              and heartfelt hospitality in the heart of downtown Chicago.
+              We are a family-owned Mediterranean bistro, focused on traditional coastal recipes
+              served with a contemporary twist. Experience cold-pressed olive oils, hand-picked garden
+              herbs, and heartfelt Mediterranean hospitality in the heart of Illinois.
             </p>
-            <a
-              href="#reservations"
-              className="btn btn-primary"
-              onClick={handleCtaClick}
-              id="hero-reserve-btn"
-              aria-label="Reserve a Table at Little Lemon"
-            >
-              Reserve a Table
-            </a>
+            
+            {/* Action Buttons */}
+            <div className="hero-actions">
+              <a
+                href="#reservations"
+                className="btn btn-primary"
+                onClick={handleReserve}
+                id="hero-reserve-btn"
+                aria-label="Reserve a Table at Little Lemon"
+              >
+                Reserve a Table
+              </a>
+              <a
+                href="#menu"
+                className="btn btn-outline-hero"
+                onClick={handleMenu}
+                id="hero-menu-btn"
+                aria-label="Explore Our Full Mediterranean Menu"
+              >
+                Explore Our Menu
+              </a>
+            </div>
+
+            {/* Quick Highlights Strip */}
+            <div className="hero-features-strip" aria-label="Restaurant Highlights">
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">🌿</span>
+                <span>Fresh Organic Herbs</span>
+              </div>
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">🍋</span>
+                <span>Imported Amalfi Citrus</span>
+              </div>
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">🏛️</span>
+                <span>Outdoor Garden Patio</span>
+              </div>
+            </div>
           </div>
 
-          {/* Hero Image */}
+          {/* Hero Image Presentation */}
           <div className="hero-image-wrapper">
-            <img
-              src="/images/hero.jpg"
-              alt="Mediterranean grilled fish specialty dish with fresh lemon and garden herbs at Little Lemon Chicago"
-              className="hero-image"
-              width="600"
-              height="400"
-              loading="eager"
-            />
+            <div className="hero-image-frame">
+              <img
+                src="/images/hero.jpg"
+                alt="Signature Mediterranean grilled fish with fresh herbs and lemon at Little Lemon Chicago"
+                className="hero-image"
+                width="600"
+                height="420"
+                loading="eager"
+              />
+              <div className="hero-image-badge" aria-hidden="true">
+                <span>Featured Specialty</span>
+                <strong>Wild Catch of the Day</strong>
+              </div>
+            </div>
           </div>
         </div>
       </div>

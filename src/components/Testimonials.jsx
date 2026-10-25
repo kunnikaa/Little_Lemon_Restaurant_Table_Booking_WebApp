@@ -3,7 +3,8 @@ import React from 'react';
 const TESTIMONIALS_DATA = [
   {
     id: 1,
-    name: 'Sarah M.',
+    name: 'Sarah Montgomery',
+    city: 'Lincoln Park, Chicago',
     rating: 5,
     avatar: 'SM',
     comment:
@@ -11,15 +12,17 @@ const TESTIMONIALS_DATA = [
   },
   {
     id: 2,
-    name: 'David R.',
+    name: 'David Richardson',
+    city: 'River North, Chicago',
     rating: 5,
     avatar: 'DR',
     comment:
-      'Celebrated our 5th anniversary here last weekend. The romantic patio seating and the lemon dessert made it unforgettable. A Chicago gem!',
+      'Celebrated our 5th anniversary here on the garden patio. The lamb chops and Amalfi lemon dessert made it unforgettable. A true Chicago gem!',
   },
   {
     id: 3,
-    name: 'Elena K.',
+    name: 'Elena Kostas',
+    city: 'West Loop, Chicago',
     rating: 5,
     avatar: 'EK',
     comment:
@@ -27,11 +30,12 @@ const TESTIMONIALS_DATA = [
   },
   {
     id: 4,
-    name: 'Marcus T.',
+    name: 'Marcus Thornton',
+    city: 'Streeterville, Chicago',
     rating: 5,
     avatar: 'MT',
     comment:
-      'Super easy online table booking. We booked for 6 people and our table was ready with customized menus. 10/10 dining experience!',
+      'Effortless online table reservation. We booked for a party of six and our table was ready with customized menus. 10/10 dining experience!',
   },
 ];
 
@@ -40,7 +44,13 @@ export default function Testimonials() {
     <section className="testimonials-section" aria-labelledby="testimonials-heading">
       <div className="container">
         <div className="testimonials-header">
+          <span className="editorial-subtitle" style={{ color: 'var(--color-primary-yellow)' }}>
+            GUEST EXPERIENCES
+          </span>
           <h2 id="testimonials-heading">What Our Guests Say</h2>
+          <p style={{ color: '#DDE5D8', maxWidth: '580px', margin: '0.5rem auto 0 auto' }}>
+            Stories from patrons who have shared unforgettable evenings around our Mediterranean tables.
+          </p>
         </div>
 
         <div className="testimonials-grid">
@@ -59,8 +69,8 @@ export default function Testimonials() {
                 </div>
                 <div>
                   <span className="testimonial-name">{item.name}</span>
-                  <div style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: '600' }}>
-                    ✓ Verified Diner
+                  <div className="testimonial-verified">
+                    <span>✓ Verified Diner</span> • <small>{item.city}</small>
                   </div>
                 </div>
               </div>

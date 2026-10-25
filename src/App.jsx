@@ -1,7 +1,9 @@
 import React, { useReducer, useState } from 'react';
+import AnnouncementBar from './components/AnnouncementBar';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import MenuHighlights from './components/MenuHighlights';
+import FeaturedDishes from './components/FeaturedDishes';
+import MenuSection from './components/MenuSection';
 import About from './components/About';
 import Testimonials from './components/Testimonials';
 import BookingForm from './components/BookingForm';
@@ -25,7 +27,7 @@ export default function App() {
     setSubmissionError(null);
 
     try {
-      // Simulate realistic API network response delay
+      // Simulate realistic network delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const success = submitAPI(formData);
@@ -60,10 +62,12 @@ export default function App() {
     setSubmissionError(null);
     dispatchTimes({ type: 'RESET_TIMES' });
 
-    // Scroll to booking section and focus
+    // Scroll to booking section and focus first input
     const section = document.getElementById('reservations');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
+      const firstInput = section.querySelector('input, select');
+      if (firstInput) firstInput.focus();
     }
   };
 
@@ -82,10 +86,13 @@ export default function App() {
         Skip to main content
       </a>
 
+      {/* Slim Top Announcement Bar */}
+      <AnnouncementBar />
+
       {/* Accessible Header */}
       <Header onNavigate={handleNavigate} />
 
-      {/* Main Semantic Landmark */}
+      {/* Main Content Landmark */}
       <main id="main-content">
         {/* Hero Section */}
         <Hero
@@ -97,12 +104,16 @@ export default function App() {
               if (firstInput) firstInput.focus();
             }
           }}
+          onMenuClick={() => handleNavigate('menu')}
         />
 
-        {/* Menu Highlights / Specials */}
-        <MenuHighlights />
+        {/* Featured Signature Dishes */}
+        <FeaturedDishes onNavigateToMenu={handleNavigate} />
 
-        {/* Dedicated Table Booking Section */}
+        {/* Comprehensive Culinary Menu (16 Dishes, Categories & Search) */}
+        <MenuSection />
+
+        {/* Dedicated Table Booking Section (Core Functional Requirement) */}
         <section
           id="reservations"
           className="booking-section"
@@ -110,10 +121,11 @@ export default function App() {
         >
           <div className="container">
             <div className="booking-header">
-              <h2 id="booking-section-heading">Reserve a Table</h2>
+              <span className="editorial-subtitle">ONLINE TABLE RESERVATIONS</span>
+              <h2 id="booking-section-heading">Reserve a Table at Little Lemon</h2>
               <p>
-                Experience the authentic flavors of the Mediterranean. Book your table in advance
-                to secure your spot at Little Lemon Chicago.
+                Experience genuine Mediterranean hospitality. Choose your preferred dining room or
+                garden patio and receive immediate confirmation.
               </p>
             </div>
 
@@ -141,14 +153,14 @@ export default function App() {
           </div>
         </section>
 
-        {/* Testimonials / Reviews */}
-        <Testimonials />
-
-        {/* About Restaurant Founders */}
+        {/* Story of Founders Mario & Adrian */}
         <About />
+
+        {/* Customer Testimonials & Social Proof */}
+        <Testimonials />
       </main>
 
-      {/* Accessible Footer */}
+      {/* Accessible Editorial Footer */}
       <Footer onNavigate={handleNavigate} />
     </div>
   );
