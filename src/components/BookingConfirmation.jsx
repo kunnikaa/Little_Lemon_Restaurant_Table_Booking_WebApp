@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { formatDateForDisplay } from '../utils/bookingUtils';
+import { formatCurrency } from '../utils/currency';
 
 export default function BookingConfirmation({ bookingDetails, onReset }) {
   if (!bookingDetails) {
@@ -105,6 +107,19 @@ export default function BookingConfirmation({ bookingDetails, onReset }) {
               </span>
             </div>
           )}
+
+          {bookingDetails.preOrderedDishes && bookingDetails.preOrderedDishes.length > 0 && (
+            <div className="confirmation-item" style={{ gridColumn: '1 / -1', borderTop: '1px dashed var(--color-muted-sage)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
+              <span className="confirmation-item-label">Pre-Selected Dishes (Dine-in Pre-Order)</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.35rem' }}>
+                {bookingDetails.preOrderedDishes.map((dish, i) => (
+                  <span key={i} className="attach-dish-chip">
+                    {dish.quantity}× {dish.name} ({formatCurrency(dish.price * dish.quantity)})
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -120,7 +135,7 @@ export default function BookingConfirmation({ bookingDetails, onReset }) {
         }}
       >
         ℹ <em>Capstone Demonstration Notice:</em> This is a frontend simulation created for the Coursera Meta Front-End Capstone.
-        A confirmation receipt has been simulated and saved to local state.
+        Your reservation has been saved to your local session history.
       </p>
 
       {/* Action Buttons */}
@@ -134,17 +149,13 @@ export default function BookingConfirmation({ bookingDetails, onReset }) {
           Book Another Table
         </button>
 
-        <a
-          href="#home"
-          className="btn btn-outline"
-          onClick={(e) => {
-            e.preventDefault();
-            const home = document.getElementById('home');
-            if (home) home.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
+        <Link to="/my-reservations" className="btn btn-secondary">
+          View My Reservations →
+        </Link>
+
+        <Link to="/" className="btn btn-outline">
           Return to Home
-        </a>
+        </Link>
       </div>
     </div>
   );

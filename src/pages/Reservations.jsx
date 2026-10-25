@@ -3,6 +3,7 @@ import BookingForm from '../components/BookingForm';
 import BookingConfirmation from '../components/BookingConfirmation';
 import { initializeTimes, updateTimes } from '../utils/bookingUtils';
 import { submitAPI } from '../utils/bookingApi';
+import { saveReservation } from '../utils/orderStorage';
 
 export default function Reservations() {
   // Reducer for available reservation times (Coursera Capstone requirement)
@@ -25,10 +26,15 @@ export default function Reservations() {
 
       if (success) {
         const referenceId = `LL-${Date.now().toString(36).toUpperCase().slice(-5)}`;
-        setConfirmedBooking({
+        const newBooking = {
           ...formData,
+          referenceId,
           id: referenceId,
-        });
+          status: 'Confirmed',
+          createdAt: new Date().toISOString(),
+        };
+        saveReservation(newBooking);
+        setConfirmedBooking(newBooking);
 
         // Scroll to confirmation box
         const card = document.getElementById('reservations-card-wrapper');

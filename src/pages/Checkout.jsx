@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { formatCurrency } from '../utils/currency';
+import { saveOrder } from '../utils/orderStorage';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -97,13 +98,7 @@ export default function Checkout() {
     };
 
     // Save to demonstration history in localStorage
-    try {
-      const history = JSON.parse(localStorage.getItem('little_lemon_order_history') || '[]');
-      history.push(completedOrder);
-      localStorage.setItem('little_lemon_order_history', JSON.stringify(history));
-    } catch {
-      // Safe fallback
-    }
+    saveOrder(completedOrder);
 
     // Clear cart and navigate to confirmation page
     clearCart();

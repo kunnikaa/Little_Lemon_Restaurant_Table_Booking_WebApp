@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { MENU_CATEGORIES, MENU_ITEMS } from '../data/menuItems';
 import { useCart } from '../context/CartContext';
+import FavoriteButton from '../components/FavoriteButton';
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState('All Dishes');
@@ -182,6 +183,7 @@ export default function Menu() {
                         loading="lazy"
                       />
                       <span className="menu-dietary-tag">{dish.dietary}</span>
+                      <FavoriteButton dishId={dish.id} dishName={dish.name} className="card-favorite-top-btn" />
                     </div>
 
                     <div className="menu-card-info">

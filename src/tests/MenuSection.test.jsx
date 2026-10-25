@@ -4,14 +4,17 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { CartProvider } from '../context/CartContext';
+import { FavoritesProvider } from '../context/FavoritesContext';
 import Menu from '../pages/Menu';
 
 function renderMenuPage() {
   return render(
     <MemoryRouter>
-      <CartProvider>
-        <Menu />
-      </CartProvider>
+      <FavoritesProvider>
+        <CartProvider>
+          <Menu />
+        </CartProvider>
+      </FavoritesProvider>
     </MemoryRouter>
   );
 }

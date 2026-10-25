@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MENU_ITEMS } from '../data/menuItems';
 import { useCart } from '../context/CartContext';
 import { formatCurrency } from '../utils/currency';
+import FavoriteButton from '../components/FavoriteButton';
 
 export default function DishDetails() {
   const { dishId } = useParams();
@@ -83,7 +84,10 @@ export default function DishDetails() {
               <span className="dish-details-price">{dish.price}</span>
             </div>
 
-            <h1 className="dish-details-title">{dish.name}</h1>
+            <div className="dish-details-title-row">
+              <h1 className="dish-details-title">{dish.name}</h1>
+              <FavoriteButton dishId={dish.id} dishName={dish.name} className="detail-favorite-btn" size={24} />
+            </div>
 
             <p className="dish-details-full-desc">{dish.fullDescription}</p>
 

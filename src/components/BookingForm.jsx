@@ -27,6 +27,26 @@ export default function BookingForm({
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
+  // Optional Dine-in Food Pre-Order (Journey A)
+  const [enablePreOrder, setEnablePreOrder] = useState(false);
+  const [preOrderItems, setPreOrderItems] = useState({});
+
+  const PREORDER_OPTIONS = [
+    { id: 1, name: 'Greek Salad', price: 12.99, desc: 'Crispy romaine, Kalamata olives, feta' },
+    { id: 2, name: 'Bruschetta', price: 9.99, desc: 'Grilled garlic bread, heirloom tomatoes, olive oil' },
+    { id: 3, name: 'Lemon Dessert', price: 8.50, desc: 'Layered citrus sponge with lemon mascarpone cream' },
+    { id: 4, name: 'Mediterranean Pasta', price: 18.99, desc: 'Linguine with garlic prawns & fresh herbs' },
+    { id: 7, name: 'Limoncello Spritz', price: 9.50, desc: 'House limoncello, prosecco & soda' },
+  ];
+
+  const handlePreOrderQtyChange = (dishId, delta) => {
+    setPreOrderItems((prev) => {
+      const current = prev[dishId] || 0;
+      const next = Math.max(0, current + delta);
+      return { ...prev, [dishId]: next };
+    });
+  };
+
   // When availableTimes update (e.g. after date change), adjust time if needed
   useEffect(() => {
     if (availableTimes && availableTimes.length > 0) {
@@ -111,9 +131,23 @@ export default function BookingForm({
       return;
     }
 
+    // Build pre-ordered dishes list if enabled
+    const preOrderedDishes = enablePreOrder
+      ? Object.entries(preOrderItems)
+          .filter(([_, qty]) => qty > 0)
+          .map(([id, qty]) => {
+            const item = PREORDER_OPTIONS.find((opt) => opt.id === Number(id));
+            return item ? { id: Number(id), name: item.name, price: item.price, quantity: qty } : null;
+          })
+          .filter(Boolean)
+      : [];
+
     // Call submit handler with verified form data
     if (onSubmitBooking) {
-      onSubmitBooking(formData);
+      onSubmitBooking({
+        ...formData,
+        preOrderedDishes,
+      });
     }
   };
 
@@ -408,6 +442,64 @@ export default function BookingForm({
             onChange={handleChange}
             maxLength={300}
           />
+        </div>
+
+        {/* Optional Dine-in Food Pre-Order (Journey A) */}
+        <div className="form-group full-width booking-preorder-container">
+          <div className="booking-preorder-header">
+            <label className="checkbox-toggle-label">
+              <input
+                type="checkbox"
+                checked={enablePreOrder}
+                onChange={(e) => setEnablePreOrder(e.target.checked)}
+              />
+              <span className="checkbox-custom" />
+              <div>
+                <strong>Pre-select dishes for your table (Optional Dine-in Pre-Order)</strong>
+                <p className="preorder-subtext">
+                  Have chef Adrian and Mario's signature dishes freshly prepared and served right when you sit down.
+                </p>
+              </div>
+            </label>
+          </div>
+
+          {enablePreOrder && (
+            <div className="booking-preorder-picker">
+              <div className="preorder-dishes-grid">
+                {PREORDER_OPTIONS.map((item) => {
+                  const qty = preOrderItems[item.id] || 0;
+                  return (
+                    <div key={item.id} className={`preorder-dish-row ${qty > 0 ? 'selected' : ''}`}>
+                      <div className="preorder-dish-info">
+                        <strong>{item.name}</strong>
+                        <span className="preorder-dish-price">${item.price.toFixed(2)}</span>
+                        <small className="preorder-dish-desc">{item.desc}</small>
+                      </div>
+                      <div className="preorder-qty-stepper">
+                        <button
+                          type="button"
+                          className="stepper-btn"
+                          onClick={() => handlePreOrderQtyChange(item.id, -1)}
+                          aria-label={`Decrease ${item.name} quantity`}
+                        >
+                          −
+                        </button>
+                        <span className="stepper-count">{qty}</span>
+                        <button
+                          type="button"
+                          className="stepper-btn"
+                          onClick={() => handlePreOrderQtyChange(item.id, 1)}
+                          aria-label={`Increase ${item.name} quantity`}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

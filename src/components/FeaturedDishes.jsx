@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MENU_ITEMS } from '../data/menuItems';
 import { useCart } from '../context/CartContext';
+import FavoriteButton from './FavoriteButton';
 
 export default function FeaturedDishes() {
   const [notification, setNotification] = useState('');
@@ -53,17 +54,20 @@ export default function FeaturedDishes() {
         <div className="featured-grid">
           {featuredItems.map((dish) => (
             <article key={dish.id} className="featured-card">
-              <Link to={`/menu/${dish.id}`} className="featured-card-media" aria-label={`View details for ${dish.name}`}>
-                <img
-                  src={dish.image}
-                  alt={dish.alt}
-                  className="featured-card-img"
-                  width="400"
-                  height="260"
-                  loading="lazy"
-                />
-                <span className="featured-dietary-badge">{dish.dietary}</span>
-              </Link>
+              <div className="featured-card-media-wrapper">
+                <Link to={`/menu/${dish.id}`} className="featured-card-media" aria-label={`View details for ${dish.name}`}>
+                  <img
+                    src={dish.image}
+                    alt={dish.alt}
+                    className="featured-card-img"
+                    width="400"
+                    height="260"
+                    loading="lazy"
+                  />
+                  <span className="featured-dietary-badge">{dish.dietary}</span>
+                </Link>
+                <FavoriteButton dishId={dish.id} dishName={dish.name} className="card-favorite-top-btn" />
+              </div>
               <div className="featured-card-content">
                 <div className="featured-card-meta">
                   <span className="featured-category">{dish.category}</span>

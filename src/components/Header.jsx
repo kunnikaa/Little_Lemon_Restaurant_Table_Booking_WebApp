@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../context/FavoritesContext';
+import ProfileDropdown from './ProfileDropdown';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
+  const { favoritesCount } = useFavorites();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -14,10 +19,15 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
+  const handleMobileLogout = () => {
+    logout();
+    closeMenu();
+  };
+
   return (
     <header className="header" role="banner">
       <div className="container header-container">
-        {/* Brand Logo using the user's attached reference image */}
+        {/* Brand Logo with 20-30% size increase & vertical centering */}
         <Link
           to="/"
           className="brand-logo"
@@ -28,12 +38,12 @@ export default function Header() {
             src="/images/little-lemon-logo-cropped.png"
             alt="Little Lemon Mediterranean Kitchen Logo"
             className="brand-logo-img"
-            width="170"
-            height="58"
+            width="215"
+            height="66"
           />
         </Link>
 
-        {/* Mobile Navigation Toggle */}
+        {/* Mobile Actions: Cart, Profile & Hamburger */}
         <div className="header-mobile-actions">
           <Link
             to="/order"
@@ -56,7 +66,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Primary Multi-Page Navigation */}
+        {/* Primary Navigation & Utility Actions */}
         <nav id="primary-navigation" aria-label="Main Navigation">
           <ul className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
             <li>
@@ -106,7 +116,7 @@ export default function Header() {
               </NavLink>
             </li>
 
-            {/* Cart Icon Link */}
+            {/* Cart Button */}
             <li className="nav-cart-wrapper">
               <NavLink
                 to="/order"
@@ -122,7 +132,12 @@ export default function Header() {
               </NavLink>
             </li>
 
-            {/* Book a Table Primary CTA */}
+            {/* Desktop User Profile Dropdown */}
+            <li className="nav-profile-desktop">
+              <ProfileDropdown onNavigate={closeMenu} />
+            </li>
+
+            {/* Primary Table Booking CTA */}
             <li>
               <Link
                 to="/reservations"
@@ -131,6 +146,55 @@ export default function Header() {
               >
                 Book a Table
               </Link>
+            </li>
+
+            {/* Mobile-only Account & Favorites Links */}
+            <li className="mobile-account-section">
+              <div className="mobile-account-divider" />
+              {isAuthenticated ? (
+                <div className="mobile-user-box">
+                  <div className="mobile-user-header">
+                    <span className="profile-avatar-circle">{user.avatar || 'LL'}</span>
+                    <div className="mobile-user-meta">
+                      <strong>{user.name}</strong>
+                      <small>{user.email}</small>
+                    </div>
+                  </div>
+                  <div className="mobile-user-links">
+                    <Link to="/profile" className="mobile-nav-sublink" onClick={closeMenu}>
+                      👤 My Profile
+                    </Link>
+                    <Link to="/favorites" className="mobile-nav-sublink" onClick={closeMenu}>
+                      ❤️ My Favorites ({favoritesCount})
+                    </Link>
+                    <Link to="/orders" className="mobile-nav-sublink" onClick={closeMenu}>
+                      📦 My Orders
+                    </Link>
+                    <Link to="/my-reservations" className="mobile-nav-sublink" onClick={closeMenu}>
+                      📅 My Reservations
+                    </Link>
+                    <button
+                      type="button"
+                      className="mobile-nav-sublink mobile-logout-btn"
+                      onClick={handleMobileLogout}
+                    >
+                      🚪 Log Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mobile-auth-actions">
+                  <Link to="/login" className="btn btn-outline" onClick={closeMenu}>
+                    Sign In
+                  </Link>
+                  <Link to="/register" className="btn btn-primary" onClick={closeMenu}>
+                    Create Account
+                  </Link>
+                  <Link to="/favorites" className="mobile-nav-sublink" onClick={closeMenu}>
+                    ❤️ My Favorites ({favoritesCount})
+                  </Link>
+                </div>
+              )}
             </li>
           </ul>
         </nav>
