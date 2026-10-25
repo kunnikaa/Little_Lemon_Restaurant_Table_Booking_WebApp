@@ -161,15 +161,15 @@ export default function Header() {
 
         {/* Right: Desktop Actions (Cart, Profile Dropdown, Book a Table Button) */}
         <div className="header-actions-right">
-          {/* Cart Icon Link */}
+          {/* Cart Icon Link (Icon-only with small accurate badge) */}
           <NavLink
             to="/order"
             className="nav-cart-btn"
             onClick={closeMenu}
-            aria-label={`Pre-Order Cart with ${cartCount} items`}
+            aria-label={cartCount > 0 ? `Pre-Order Cart with ${cartCount} items` : 'Pre-Order Cart'}
+            title={cartCount > 0 ? `Cart (${cartCount} items)` : 'Cart'}
           >
             <span className="cart-icon" aria-hidden="true">🛒</span>
-            <span className="cart-label">Cart</span>
             {cartCount > 0 && (
               <span className="cart-badge" aria-label={`${cartCount} items in cart`}>
                 {cartCount}

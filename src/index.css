@@ -408,30 +408,45 @@ a {
 .nav-cart-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  position: relative;
+  width: 44px;
+  height: 44px;
   background-color: var(--color-warm-cream);
-  padding: 0.45rem 0.95rem;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--color-neutral-light);
-  font-weight: 700;
-  font-size: 0.95rem;
+  border: 1.5px solid var(--color-muted-sage);
+  font-size: 1.2rem;
   color: var(--color-forest-dark);
   transition: all var(--transition-fast);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-cart-btn:hover {
-  background-color: var(--color-muted-sage);
+  background-color: #EDEFEE;
   border-color: var(--color-primary-olive);
+  box-shadow: var(--shadow-subtle);
+  transform: translateY(-1px);
 }
 
-.cart-badge {
+.nav-cart-btn .cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--color-primary-olive);
-  color: var(--color-soft-white);
-  font-size: 0.75rem;
+  color: var(--color-primary-yellow);
+  font-size: 0.72rem;
   font-weight: 800;
-  padding: 0.15rem 0.55rem;
   border-radius: var(--radius-pill);
+  border: 2px solid var(--color-soft-white);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  line-height: 1;
 }
 
 .nav-cta-btn {
@@ -2527,11 +2542,13 @@ textarea.form-control {
 .profile-menu-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.35rem;
   background-color: var(--color-warm-cream);
-  border: 1px solid var(--color-muted-sage);
+  border: 1.5px solid var(--color-muted-sage);
   border-radius: var(--radius-pill);
-  padding: 0.35rem 0.75rem 0.35rem 0.45rem;
+  height: 44px;
+  padding: 0 0.65rem 0 0.45rem;
   cursor: pointer;
   color: var(--color-charcoal);
   font-weight: 600;
@@ -2544,6 +2561,7 @@ textarea.form-control {
   background-color: #EDEFEE;
   border-color: var(--color-primary-olive);
   box-shadow: var(--shadow-subtle);
+  transform: translateY(-1px);
 }
 
 .profile-avatar-circle {
@@ -3841,6 +3859,496 @@ textarea.form-control {
 
   .auth-card {
     padding: 2rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   ABOUT PAGE EDITORIAL REDESIGN (Mediterranean Storytelling & Principles)
+   ========================================================================== */
+
+/* 1. About Hero Section */
+.about-hero-section {
+  background-color: var(--color-primary-olive);
+  background: linear-gradient(135deg, var(--color-primary-olive) 0%, #30413b 100%);
+  color: var(--color-soft-white);
+  padding: 5rem 0 5.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.hero-subtitle {
+  color: var(--color-primary-yellow);
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  margin-bottom: 0.5rem;
+}
+
+.about-hero-title {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.12;
+  color: #F8F5ED;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.5px;
+}
+
+.about-hero-lead {
+  font-size: 1.2rem;
+  line-height: 1.75;
+  color: #EDEFEE;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.about-hero-ctas {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.hero-btn-menu {
+  background-color: var(--color-primary-yellow);
+  color: var(--color-charcoal);
+  border-color: var(--color-primary-yellow);
+}
+
+.hero-btn-reserve {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: var(--color-soft-white);
+}
+
+.about-hero-media {
+  position: relative;
+}
+
+.about-hero-image-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  border: 4px solid rgba(255, 255, 255, 0.15);
+}
+
+.about-hero-image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-normal);
+}
+
+.about-hero-image-frame:hover .about-hero-image {
+  transform: scale(1.02);
+}
+
+.about-hero-badge {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  background-color: rgba(36, 53, 44, 0.94);
+  backdrop-filter: blur(8px);
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(244, 206, 20, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #F8F5ED;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.badge-year {
+  color: var(--color-primary-yellow);
+}
+
+/* 2. Founders Section */
+.about-founders-section {
+  padding: 6.5rem 0;
+  background-color: var(--color-soft-white);
+}
+
+.about-founders-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.founders-image-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: visible;
+}
+
+.founders-image {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  display: block;
+}
+
+.founders-floating-quote {
+  position: absolute;
+  bottom: -1.75rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  background-color: var(--color-forest-dark);
+  color: var(--color-warm-cream);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary-yellow);
+  box-shadow: var(--shadow-elevation);
+}
+
+.founders-floating-quote p {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  margin-bottom: 0.35rem;
+}
+
+.founders-floating-quote cite {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary-yellow);
+  font-style: normal;
+}
+
+.about-section-heading {
+  font-family: var(--font-serif);
+  font-size: 2.85rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-forest-dark);
+  margin-top: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.about-narrative-lead {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-primary-olive);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.about-narrative-paragraphs p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #3F3C36;
+  margin-bottom: 1rem;
+}
+
+.about-chef-profiles {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-neutral-light);
+  flex-wrap: wrap;
+}
+
+.chef-profile-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background-color: var(--color-warm-cream);
+  padding: 0.85rem 1.35rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-muted-sage);
+}
+
+.chef-avatar-icon {
+  font-size: 1.75rem;
+}
+
+.chef-name {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--color-forest-dark);
+}
+
+.chef-role {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--color-warm-gray);
+  font-weight: 600;
+}
+
+/* 3. Culinary Principles Section */
+.about-principles-section {
+  padding: 6.5rem 0;
+  background-color: var(--color-warm-cream);
+}
+
+.section-header-centered {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.section-header-desc {
+  font-size: 1.15rem;
+  color: var(--color-warm-gray);
+  margin-top: 0.65rem;
+  line-height: 1.6;
+}
+
+.principles-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.25rem;
+}
+
+.principle-card {
+  background-color: var(--color-soft-white);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem 2.25rem;
+  border: 1px solid var(--color-neutral-light);
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.principle-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-primary-yellow);
+}
+
+.principle-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--color-warm-cream);
+  border: 1px solid var(--color-muted-sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.principle-emoji {
+  font-size: 2rem;
+}
+
+.principle-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-forest-dark);
+  margin-bottom: 0.85rem;
+}
+
+.principle-card-desc {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #555047;
+  flex: 1;
+}
+
+.principle-tag {
+  margin-top: 1.75rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-primary-olive);
+}
+
+/* 4. Restaurant Experience Section */
+.about-experience-section {
+  padding: 6.5rem 0;
+  background-color: var(--color-soft-white);
+}
+
+.experience-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.experience-media {
+  position: relative;
+}
+
+.experience-image {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: block;
+}
+
+.experience-lead {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary-olive);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.experience-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4A463F;
+  margin-bottom: 2rem;
+}
+
+.experience-actions {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* 5. Closing CTA Section */
+.about-closing-cta-section {
+  padding: 5.5rem 0 6.5rem 0;
+  background: linear-gradient(135deg, var(--color-forest-dark) 0%, #17241e 100%);
+  color: var(--color-soft-white);
+}
+
+.closing-cta-box {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cta-subtitle {
+  color: var(--color-primary-yellow);
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  margin-bottom: 0.65rem;
+}
+
+.closing-cta-heading {
+  font-family: var(--font-serif);
+  font-size: 3.25rem;
+  font-weight: 700;
+  color: var(--color-primary-yellow);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.closing-cta-desc {
+  font-size: 1.2rem;
+  line-height: 1.75;
+  color: #EDEFEE;
+  margin-bottom: 2.5rem;
+}
+
+.closing-cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.cta-primary-btn {
+  background-color: var(--color-primary-yellow);
+  color: var(--color-charcoal);
+  border-color: var(--color-primary-yellow);
+}
+
+.cta-secondary-btn {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-soft-white);
+}
+
+.cta-secondary-btn:hover {
+  background-color: var(--color-soft-white);
+  color: var(--color-forest-dark);
+}
+
+/* Responsive Media Queries for About Page */
+@media (max-width: 960px) {
+  .about-hero-container,
+  .about-founders-grid,
+  .experience-wrapper {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .about-hero-media,
+  .about-founders-media,
+  .experience-media {
+    order: 2;
+  }
+
+  .about-hero-content,
+  .about-founders-text,
+  .experience-content {
+    order: 1;
+  }
+
+  .principles-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .about-hero-title {
+    font-size: 2.75rem;
+  }
+
+  .about-section-heading,
+  .closing-cta-heading {
+    font-size: 2.35rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-hero-section,
+  .about-founders-section,
+  .about-principles-section,
+  .about-experience-section,
+  .about-closing-cta-section {
+    padding: 3.75rem 0;
+  }
+
+  .about-hero-image,
+  .founders-image,
+  .experience-image {
+    height: 320px;
+  }
+
+  .founders-floating-quote {
+    position: static;
+    margin-top: 1rem;
+  }
+
+  .about-hero-title {
+    font-size: 2.25rem;
+  }
+
+  .about-hero-ctas,
+  .experience-actions,
+  .closing-cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .about-hero-ctas .btn,
+  .experience-actions .btn,
+  .closing-cta-actions .btn {
+    width: 100%;
   }
 }
 

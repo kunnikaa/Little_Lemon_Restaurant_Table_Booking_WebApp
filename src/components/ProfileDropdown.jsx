@@ -143,6 +143,17 @@ export default function ProfileDropdown({ onNavigate }) {
                     <span>My Reservations</span>
                   </Link>
                 </li>
+                <li role="none">
+                  <Link
+                    to="/profile"
+                    className="profile-menu-item"
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
+                    <span className="menu-icon" aria-hidden="true">⚙️</span>
+                    <span>Account Settings</span>
+                  </Link>
+                </li>
                 <li className="profile-divider" role="separator" />
                 <li role="none">
                   <button

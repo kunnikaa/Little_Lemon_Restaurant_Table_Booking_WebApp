@@ -101,8 +101,9 @@ describe('Multi-Page Application & Routing Flow', () => {
     await user.click(aboutLink);
 
     expect(
-      await screen.findByRole('heading', { name: /The Story of Little Lemon/i })
+      await screen.findByRole('heading', { name: /Two Friends, One Shared Culinary Dream/i })
     ).toBeInTheDocument();
-    expect(screen.getByText(/Two Friends, One Shared Culinary Dream/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Mario/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Adrian/i).length).toBeGreaterThan(0);
   });
 });
