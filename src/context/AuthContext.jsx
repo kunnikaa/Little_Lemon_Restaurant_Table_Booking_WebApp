@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 const AUTH_USER_KEY = 'little_lemon_auth_user';
 const ADDRESSES_KEY = 'little_lemon_saved_addresses';
 
-const DEFAULT_DEMO_USER = {
+export const DEFAULT_DEMO_USER = {
   id: 'usr_demo_01',
   name: 'Elena Contos',
   email: 'elena.contos@example.com',
@@ -15,7 +15,7 @@ const DEFAULT_DEMO_USER = {
   bio: 'Mediterranean food lover & Little Lemon regular.',
 };
 
-const DEFAULT_ADDRESSES = [
+export const DEFAULT_ADDRESSES = [
   {
     id: 'addr_1',
     label: 'Home',
@@ -37,13 +37,14 @@ const DEFAULT_ADDRESSES = [
 ];
 
 export function AuthProvider({ children }) {
+  // Start with null by default unless the user has previously signed in
   const [user, setUser] = useState(() => {
     try {
       const saved = localStorage.getItem(AUTH_USER_KEY);
-      return saved ? JSON.parse(saved) : DEFAULT_DEMO_USER;
+      return saved ? JSON.parse(saved) : null;
     } catch (e) {
       console.warn('Failed to parse saved user:', e);
-      return DEFAULT_DEMO_USER;
+      return null;
     }
   });
 
@@ -65,7 +66,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(AUTH_USER_KEY);
       }
     } catch (e) {
-      console.warn('Failed to save user:', e);
+      console.warn('Failed to save user session:', e);
     }
   }, [user]);
 
@@ -79,8 +80,7 @@ export function AuthProvider({ children }) {
 
   // Frontend demonstration login
   const login = async ({ email, password }) => {
-    // Basic simulation delay
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     if (!email || !password) {
       throw new Error('Please enter both your email address and password.');
@@ -89,7 +89,13 @@ export function AuthProvider({ children }) {
       throw new Error('Password must be at least 6 characters.');
     }
 
-    // Generate user initials
+    // If logging in with demo email, load full demo profile
+    if (email.toLowerCase() === DEFAULT_DEMO_USER.email.toLowerCase()) {
+      setUser(DEFAULT_DEMO_USER);
+      return DEFAULT_DEMO_USER;
+    }
+
+    // Format initials from email
     const namePart = email.split('@')[0];
     const formattedName = namePart
       .split(/[._-]/)
@@ -108,7 +114,7 @@ export function AuthProvider({ children }) {
       name: formattedName || 'Little Lemon Guest',
       email: email.toLowerCase(),
       phone: '(312) 555-0142',
-      memberSince: 'October 2026',
+      memberSince: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
       avatar: initials,
       bio: 'Little Lemon Member (Demo Account)',
     };
@@ -119,7 +125,7 @@ export function AuthProvider({ children }) {
 
   // Frontend demonstration registration
   const signup = async ({ name, email, phone, password }) => {
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     if (!name || !email || !password) {
       throw new Error('Please fill in all required fields.');

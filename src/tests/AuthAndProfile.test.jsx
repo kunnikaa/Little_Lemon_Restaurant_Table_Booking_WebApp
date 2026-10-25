@@ -3,9 +3,10 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider, DEFAULT_DEMO_USER } from '../context/AuthContext';
 import { FavoritesProvider } from '../context/FavoritesContext';
 import { CartProvider } from '../context/CartContext';
+import Header from '../components/Header';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Profile from '../pages/Profile';
@@ -64,7 +65,30 @@ describe('Authentication, Profile, and History Features', () => {
     expect(await screen.findByText(/Passwords do not match/i)).toBeInTheDocument();
   });
 
-  it('renders Profile page with user account details and delivery addresses', () => {
+  it('shows unauthenticated state with Sign In and Create Account options and no Logout', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Header />
+            </FavoritesProvider>
+          </CartProvider>
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    const profileBtn = screen.getByRole('button', { name: /User account menu/i });
+    await user.click(profileBtn);
+
+    expect(screen.getByRole('link', { name: /Sign In/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Create Account/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Logout/i })).not.toBeInTheDocument();
+  });
+
+  it('renders Profile page with user account details and delivery addresses when authenticated', () => {
+    localStorage.setItem('little_lemon_auth_user', JSON.stringify(DEFAULT_DEMO_USER));
     render(
       <MemoryRouter>
         <AuthProvider>

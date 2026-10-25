@@ -13,9 +13,11 @@ function TestFavoritesConsumer() {
   return (
     <div>
       <span data-testid="count">{favoritesCount}</span>
-      <span data-testid="is-fav-1">{isFavorite(1) ? 'yes' : 'no'}</span>
-      <button onClick={() => toggleFavorite(1)}>Toggle 1</button>
-      <button onClick={() => removeFromFavorites(1)}>Remove 1</button>
+      <span data-testid="is-fav-bruschetta">{isFavorite('bruschetta-al-pomodoro') ? 'yes' : 'no'}</span>
+      <span data-testid="is-fav-salad">{isFavorite('greek-salad') ? 'yes' : 'no'}</span>
+      <button onClick={() => toggleFavorite('bruschetta-al-pomodoro')}>Toggle Bruschetta</button>
+      <button onClick={() => toggleFavorite('greek-salad')}>Toggle Salad</button>
+      <button onClick={() => removeFromFavorites('bruschetta-al-pomodoro')}>Remove Bruschetta</button>
       <button onClick={clearFavorites}>Clear All</button>
     </div>
   );
@@ -26,7 +28,7 @@ describe('Favorites Feature & Context', () => {
     localStorage.clear();
   });
 
-  it('manages favorites additions, toggles, removals, and persistence', async () => {
+  it('initially has no favorites and toggles string IDs independently without cross-affecting other dishes', async () => {
     const user = userEvent.setup();
     render(
       <FavoritesProvider>
@@ -34,23 +36,34 @@ describe('Favorites Feature & Context', () => {
       </FavoritesProvider>
     );
 
-    // Initial default favorites contains items 1 and 2
-    expect(screen.getByTestId('count')).toHaveTextContent('2');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('yes');
+    // Initial state: 0 favorites
+    expect(screen.getByTestId('count')).toHaveTextContent('0');
+    expect(screen.getByTestId('is-fav-bruschetta')).toHaveTextContent('no');
+    expect(screen.getByTestId('is-fav-salad')).toHaveTextContent('no');
 
-    // Remove item 1
-    await user.click(screen.getByRole('button', { name: 'Remove 1' }));
+    // Toggle Bruschetta only
+    await user.click(screen.getByRole('button', { name: 'Toggle Bruschetta' }));
     expect(screen.getByTestId('count')).toHaveTextContent('1');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('no');
+    expect(screen.getByTestId('is-fav-bruschetta')).toHaveTextContent('yes');
+    expect(screen.getByTestId('is-fav-salad')).toHaveTextContent('no'); // Salad must remain unaffected
 
-    // Toggle item 1 back
-    await user.click(screen.getByRole('button', { name: 'Toggle 1' }));
+    // Toggle Salad as well
+    await user.click(screen.getByRole('button', { name: 'Toggle Salad' }));
     expect(screen.getByTestId('count')).toHaveTextContent('2');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('yes');
+    expect(screen.getByTestId('is-fav-bruschetta')).toHaveTextContent('yes');
+    expect(screen.getByTestId('is-fav-salad')).toHaveTextContent('yes');
+
+    // Remove Bruschetta only
+    await user.click(screen.getByRole('button', { name: 'Remove Bruschetta' }));
+    expect(screen.getByTestId('count')).toHaveTextContent('1');
+    expect(screen.getByTestId('is-fav-bruschetta')).toHaveTextContent('no');
+    expect(screen.getByTestId('is-fav-salad')).toHaveTextContent('yes'); // Salad must remain favorited
 
     // Clear all
     await user.click(screen.getByRole('button', { name: 'Clear All' }));
     expect(screen.getByTestId('count')).toHaveTextContent('0');
+    expect(screen.getByTestId('is-fav-bruschetta')).toHaveTextContent('no');
+    expect(screen.getByTestId('is-fav-salad')).toHaveTextContent('no');
   });
 
   it('toggles favorite button with accessible aria attributes', async () => {

@@ -83,11 +83,11 @@ export default function FeaturedDishes() {
                   </Link>
                   <button
                     type="button"
-                    className="order-delivery-btn"
+                    className="btn btn-primary add-to-cart-quick-btn"
                     onClick={() => handleOrder(dish)}
                     aria-label={`Add ${dish.name} to cart`}
                   >
-                    + Add to Cart 🛒
+                    + Add to Cart
                   </button>
                 </div>
               </div>

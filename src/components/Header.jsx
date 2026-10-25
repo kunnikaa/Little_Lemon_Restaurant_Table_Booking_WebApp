@@ -27,48 +27,31 @@ export default function Header() {
   return (
     <header className="header" role="banner">
       <div className="container header-container">
-        {/* Brand Logo with 20-30% size increase & vertical centering */}
-        <Link
-          to="/"
-          className="brand-logo"
-          onClick={closeMenu}
-          aria-label="Little Lemon Mediterranean Kitchen - Return to Home"
-        >
-          <img
-            src="/images/little-lemon-logo-cropped.png"
-            alt="Little Lemon Mediterranean Kitchen Logo"
-            className="brand-logo-img"
-            width="215"
-            height="66"
-          />
-        </Link>
-
-        {/* Mobile Actions: Cart, Profile & Hamburger */}
-        <div className="header-mobile-actions">
+        {/* Left: Brand Logo & Wordmark */}
+        <div className="header-brand-left">
           <Link
-            to="/order"
-            className="mobile-cart-btn"
-            aria-label={`Cart with ${cartCount} items`}
+            to="/"
+            className="brand-logo"
+            onClick={closeMenu}
+            aria-label="Little Lemon Mediterranean Kitchen - Return to Home"
           >
-            <span aria-hidden="true">🛒</span>
-            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            <img
+              src="/images/little-lemon-logo-cropped.png"
+              alt="Little Lemon Mediterranean Kitchen Logo"
+              className="brand-logo-img"
+              width="205"
+              height="62"
+            />
           </Link>
-
-          <button
-            type="button"
-            className="mobile-menu-btn"
-            aria-label="Toggle navigation menu"
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="primary-navigation"
-            onClick={toggleMobileMenu}
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
         </div>
 
-        {/* Primary Navigation & Utility Actions */}
-        <nav id="primary-navigation" aria-label="Main Navigation">
-          <ul className={`nav-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+        {/* Center: Main Multi-Page Navigation */}
+        <nav
+          id="primary-navigation"
+          className={`header-nav-center ${isMobileMenuOpen ? 'open' : ''}`}
+          aria-label="Main Navigation"
+        >
+          <ul className="nav-menu">
             <li>
               <NavLink
                 to="/"
@@ -115,89 +98,122 @@ export default function Header() {
                 Order Online
               </NavLink>
             </li>
+          </ul>
 
-            {/* Cart Button */}
-            <li className="nav-cart-wrapper">
-              <NavLink
-                to="/order"
-                className="nav-cart-btn"
-                onClick={closeMenu}
-                aria-label={`Pre-Order Cart with ${cartCount} items`}
-              >
-                <span className="cart-icon" aria-hidden="true">🛒</span>
-                <span className="cart-label">Cart</span>
-                <span className="cart-badge" aria-label={`${cartCount} items in cart`}>
-                  {cartCount}
-                </span>
-              </NavLink>
-            </li>
+          {/* Mobile Drawer Actions (Shown only in mobile menu drawer) */}
+          <div className="mobile-drawer-footer">
+            <Link
+              to="/reservations"
+              className="btn btn-primary mobile-drawer-book-btn"
+              onClick={closeMenu}
+            >
+              Book a Table
+            </Link>
 
-            {/* Desktop User Profile Dropdown */}
-            <li className="nav-profile-desktop">
-              <ProfileDropdown onNavigate={closeMenu} />
-            </li>
+            <div className="mobile-account-divider" />
 
-            {/* Primary Table Booking CTA */}
-            <li>
-              <Link
-                to="/reservations"
-                className="btn btn-primary nav-cta-btn"
-                onClick={closeMenu}
-              >
-                Book a Table
-              </Link>
-            </li>
-
-            {/* Mobile-only Account & Favorites Links */}
-            <li className="mobile-account-section">
-              <div className="mobile-account-divider" />
-              {isAuthenticated ? (
-                <div className="mobile-user-box">
-                  <div className="mobile-user-header">
-                    <span className="profile-avatar-circle">{user.avatar || 'LL'}</span>
-                    <div className="mobile-user-meta">
-                      <strong>{user.name}</strong>
-                      <small>{user.email}</small>
-                    </div>
-                  </div>
-                  <div className="mobile-user-links">
-                    <Link to="/profile" className="mobile-nav-sublink" onClick={closeMenu}>
-                      👤 My Profile
-                    </Link>
-                    <Link to="/favorites" className="mobile-nav-sublink" onClick={closeMenu}>
-                      ❤️ My Favorites ({favoritesCount})
-                    </Link>
-                    <Link to="/orders" className="mobile-nav-sublink" onClick={closeMenu}>
-                      📦 My Orders
-                    </Link>
-                    <Link to="/my-reservations" className="mobile-nav-sublink" onClick={closeMenu}>
-                      📅 My Reservations
-                    </Link>
-                    <button
-                      type="button"
-                      className="mobile-nav-sublink mobile-logout-btn"
-                      onClick={handleMobileLogout}
-                    >
-                      🚪 Log Out
-                    </button>
+            {isAuthenticated ? (
+              <div className="mobile-user-box">
+                <div className="mobile-user-header">
+                  <span className="profile-avatar-circle">{user.avatar || 'LL'}</span>
+                  <div className="mobile-user-meta">
+                    <strong>{user.name}</strong>
+                    <small>{user.email}</small>
                   </div>
                 </div>
-              ) : (
-                <div className="mobile-auth-actions">
-                  <Link to="/login" className="btn btn-outline" onClick={closeMenu}>
-                    Sign In
-                  </Link>
-                  <Link to="/register" className="btn btn-primary" onClick={closeMenu}>
-                    Create Account
+                <div className="mobile-user-links">
+                  <Link to="/profile" className="mobile-nav-sublink" onClick={closeMenu}>
+                    👤 My Profile
                   </Link>
                   <Link to="/favorites" className="mobile-nav-sublink" onClick={closeMenu}>
                     ❤️ My Favorites ({favoritesCount})
                   </Link>
+                  <Link to="/orders" className="mobile-nav-sublink" onClick={closeMenu}>
+                    📦 My Orders
+                  </Link>
+                  <Link to="/my-reservations" className="mobile-nav-sublink" onClick={closeMenu}>
+                    📅 My Reservations
+                  </Link>
+                  <button
+                    type="button"
+                    className="mobile-nav-sublink mobile-logout-btn"
+                    onClick={handleMobileLogout}
+                  >
+                    🚪 Log Out
+                  </button>
                 </div>
-              )}
-            </li>
-          </ul>
+              </div>
+            ) : (
+              <div className="mobile-auth-actions">
+                <Link to="/login" className="btn btn-outline" onClick={closeMenu}>
+                  Sign In
+                </Link>
+                <Link to="/register" className="btn btn-primary" onClick={closeMenu}>
+                  Create Account
+                </Link>
+                <Link to="/favorites" className="mobile-nav-sublink" onClick={closeMenu}>
+                  ❤️ My Favorites ({favoritesCount})
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
+
+        {/* Right: Desktop Actions (Cart, Profile Dropdown, Book a Table Button) */}
+        <div className="header-actions-right">
+          {/* Cart Icon Link */}
+          <NavLink
+            to="/order"
+            className="nav-cart-btn"
+            onClick={closeMenu}
+            aria-label={`Pre-Order Cart with ${cartCount} items`}
+          >
+            <span className="cart-icon" aria-hidden="true">🛒</span>
+            <span className="cart-label">Cart</span>
+            {cartCount > 0 && (
+              <span className="cart-badge" aria-label={`${cartCount} items in cart`}>
+                {cartCount}
+              </span>
+            )}
+          </NavLink>
+
+          {/* Compact Profile Dropdown Menu */}
+          <div className="nav-profile-desktop">
+            <ProfileDropdown onNavigate={closeMenu} />
+          </div>
+
+          {/* Prominent Book a Table CTA */}
+          <Link
+            to="/reservations"
+            className="btn btn-primary nav-cta-btn"
+            onClick={closeMenu}
+          >
+            Book a Table
+          </Link>
+        </div>
+
+        {/* Mobile Actions: Cart & Menu Hamburger */}
+        <div className="header-mobile-actions">
+          <Link
+            to="/order"
+            className="mobile-cart-btn"
+            aria-label={`Cart with ${cartCount} items`}
+          >
+            <span aria-hidden="true">🛒</span>
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </Link>
+
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="primary-navigation"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
     </header>
   );

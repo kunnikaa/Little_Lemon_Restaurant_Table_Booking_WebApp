@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const FavoritesContext = createContext();
+const FavoritesContext = createContext(null);
 
 const STORAGE_KEY = 'little_lemon_favorites';
 
@@ -8,10 +8,23 @@ export function FavoritesProvider({ children }) {
   const [favorites, setFavorites] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [1, 2]; // default with Greek Salad & Bruschetta for discovery
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Normalize to strings, filtering out invalid values or NaNs
+          return Array.from(
+            new Set(
+              parsed
+                .map(String)
+                .filter((id) => id && id !== 'NaN' && id !== 'null' && id !== 'undefined')
+            )
+          );
+        }
+      }
+      return []; // Must start completely empty unless user has actually favorited dishes
     } catch (e) {
       console.warn('Unable to read favorites from localStorage:', e);
-      return [1, 2];
+      return [];
     }
   });
 
@@ -24,7 +37,8 @@ export function FavoritesProvider({ children }) {
   }, [favorites]);
 
   const toggleFavorite = (dishId) => {
-    const id = Number(dishId);
+    if (!dishId && dishId !== 0) return;
+    const id = String(dishId);
     setFavorites((prev) => {
       if (prev.includes(id)) {
         return prev.filter((item) => item !== id);
@@ -34,11 +48,13 @@ export function FavoritesProvider({ children }) {
   };
 
   const isFavorite = (dishId) => {
-    return favorites.includes(Number(dishId));
+    if (!dishId && dishId !== 0) return false;
+    return favorites.includes(String(dishId));
   };
 
   const removeFromFavorites = (dishId) => {
-    const id = Number(dishId);
+    if (!dishId && dishId !== 0) return;
+    const id = String(dishId);
     setFavorites((prev) => prev.filter((item) => item !== id));
   };
 
