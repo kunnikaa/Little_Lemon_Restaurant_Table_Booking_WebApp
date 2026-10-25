@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getTodayDateString, validateBookingForm } from '../utils/bookingUtils';
+import { MENU_ITEMS } from '../data/menuItems';
+import { formatCurrency } from '../utils/currency';
+import ReservationMenuModal from './ReservationMenuModal';
 
 export default function BookingForm({
   availableTimes = [],
@@ -27,23 +30,20 @@ export default function BookingForm({
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // Optional Dine-in Food Pre-Order (Journey A)
-  const [enablePreOrder, setEnablePreOrder] = useState(false);
-  const [preOrderItems, setPreOrderItems] = useState({});
+  // Table Reservation vs Table + Pre-Order Food (Journey A)
+  const [bookingChoice, setBookingChoice] = useState('table_only'); // 'table_only' or 'table_and_food'
+  const [selectedDishes, setSelectedDishes] = useState({});
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
 
-  const PREORDER_OPTIONS = [
-    { id: 1, name: 'Greek Salad', price: 12.99, desc: 'Crispy romaine, Kalamata olives, feta' },
-    { id: 2, name: 'Bruschetta', price: 9.99, desc: 'Grilled garlic bread, heirloom tomatoes, olive oil' },
-    { id: 3, name: 'Lemon Dessert', price: 8.50, desc: 'Layered citrus sponge with lemon mascarpone cream' },
-    { id: 4, name: 'Mediterranean Pasta', price: 18.99, desc: 'Linguine with garlic prawns & fresh herbs' },
-    { id: 7, name: 'Limoncello Spritz', price: 9.50, desc: 'House limoncello, prosecco & soda' },
-  ];
-
-  const handlePreOrderQtyChange = (dishId, delta) => {
-    setPreOrderItems((prev) => {
-      const current = prev[dishId] || 0;
-      const next = Math.max(0, current + delta);
-      return { ...prev, [dishId]: next };
+  const handleUpdateDishQuantity = (dishId, newQty) => {
+    setSelectedDishes((prev) => {
+      const sanitizedQty = Math.max(0, newQty);
+      if (sanitizedQty === 0) {
+        const next = { ...prev };
+        delete next[dishId];
+        return next;
+      }
+      return { ...prev, [dishId]: sanitizedQty };
     });
   };
 
@@ -131,22 +131,38 @@ export default function BookingForm({
       return;
     }
 
-    // Build pre-ordered dishes list if enabled
-    const preOrderedDishes = enablePreOrder
-      ? Object.entries(preOrderItems)
-          .filter(([_, qty]) => qty > 0)
-          .map(([id, qty]) => {
-            const item = PREORDER_OPTIONS.find((opt) => opt.id === Number(id));
-            return item ? { id: Number(id), name: item.name, price: item.price, quantity: qty } : null;
-          })
-          .filter(Boolean)
-      : [];
+    // Build pre-ordered dishes list from full menu items if enabled
+    const preOrderedDishes =
+      bookingChoice === 'table_and_food'
+        ? Object.entries(selectedDishes)
+            .filter(([_, qty]) => qty > 0)
+            .map(([id, qty]) => {
+              const dish = MENU_ITEMS.find((d) => String(d.id) === String(id));
+              return dish
+                ? {
+                    id: dish.id,
+                    name: dish.name,
+                    price: dish.priceNumber,
+                    priceFormatted: dish.price,
+                    quantity: qty,
+                    image: dish.image,
+                    category: dish.category,
+                    subtotal: dish.priceNumber * qty,
+                  }
+                : null;
+            })
+            .filter(Boolean)
+        : [];
 
-    // Call submit handler with verified form data
+    const preOrderSubtotal = preOrderedDishes.reduce((sum, item) => sum + item.subtotal, 0);
+
+    // Call submit handler with verified form data and attached pre-orders
     if (onSubmitBooking) {
       onSubmitBooking({
         ...formData,
+        bookingChoice,
         preOrderedDishes,
+        preOrderSubtotal,
       });
     }
   };
@@ -444,62 +460,192 @@ export default function BookingForm({
           />
         </div>
 
-        {/* Optional Dine-in Food Pre-Order (Journey A) */}
-        <div className="form-group full-width booking-preorder-container">
-          <div className="booking-preorder-header">
-            <label className="checkbox-toggle-label">
+        {/* Food Selection Workflow: Dual Choices */}
+        <div className="form-group full-width booking-food-workflow">
+          <div className="workflow-section-header">
+            <h3 className="workflow-title">Pre-order Food for Your Visit (Optional)</h3>
+            <p className="workflow-subtitle">
+              Choose whether you'd like your Mediterranean dishes prepared fresh upon your arrival or prefer to order at your table.
+            </p>
+          </div>
+
+          <div className="booking-choice-cards" role="radiogroup" aria-label="Reservation Food Pre-order Option">
+            <label
+              className={`booking-choice-card ${bookingChoice === 'table_only' ? 'selected' : ''}`}
+              htmlFor="choice-table-only"
+            >
               <input
-                type="checkbox"
-                checked={enablePreOrder}
-                onChange={(e) => setEnablePreOrder(e.target.checked)}
+                type="radio"
+                id="choice-table-only"
+                name="bookingChoice"
+                value="table_only"
+                checked={bookingChoice === 'table_only'}
+                onChange={() => setBookingChoice('table_only')}
               />
-              <span className="checkbox-custom" />
-              <div>
-                <strong>Pre-select dishes for your table (Optional Dine-in Pre-Order)</strong>
-                <p className="preorder-subtext">
-                  Have chef Adrian and Mario's signature dishes freshly prepared and served right when you sit down.
-                </p>
+              <div className="choice-card-content">
+                <div className="choice-icon">🍽️</div>
+                <div className="choice-text">
+                  <div className="choice-title">Reserve a Table Only</div>
+                  <div className="choice-desc">No pre-ordering needed. Browse and order from our printed menu when seated at the restaurant.</div>
+                </div>
+              </div>
+            </label>
+
+            <label
+              className={`booking-choice-card ${bookingChoice === 'table_and_food' ? 'selected' : ''}`}
+              htmlFor="choice-table-food"
+            >
+              <input
+                type="radio"
+                id="choice-table-food"
+                name="bookingChoice"
+                value="table_and_food"
+                checked={bookingChoice === 'table_and_food'}
+                onChange={() => setBookingChoice('table_and_food')}
+              />
+              <div className="choice-card-content">
+                <div className="choice-icon">🍋</div>
+                <div className="choice-text">
+                  <div className="choice-title">Reserve a Table + Pre-order Food</div>
+                  <div className="choice-desc">Browse our full 20-dish menu now. Chef Adrian &amp; Mario will prepare your selection fresh for your arrival.</div>
+                </div>
               </div>
             </label>
           </div>
 
-          {enablePreOrder && (
-            <div className="booking-preorder-picker">
-              <div className="preorder-dishes-grid">
-                {PREORDER_OPTIONS.map((item) => {
-                  const qty = preOrderItems[item.id] || 0;
-                  return (
-                    <div key={item.id} className={`preorder-dish-row ${qty > 0 ? 'selected' : ''}`}>
-                      <div className="preorder-dish-info">
-                        <strong>{item.name}</strong>
-                        <span className="preorder-dish-price">${item.price.toFixed(2)}</span>
-                        <small className="preorder-dish-desc">{item.desc}</small>
-                      </div>
-                      <div className="preorder-qty-stepper">
-                        <button
-                          type="button"
-                          className="stepper-btn"
-                          onClick={() => handlePreOrderQtyChange(item.id, -1)}
-                          aria-label={`Decrease ${item.name} quantity`}
-                        >
-                          −
-                        </button>
-                        <span className="stepper-count">{qty}</span>
-                        <button
-                          type="button"
-                          className="stepper-btn"
-                          onClick={() => handlePreOrderQtyChange(item.id, 1)}
-                          aria-label={`Increase ${item.name} quantity`}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+          {/* When Table + Food is selected */}
+          {bookingChoice === 'table_and_food' && (
+            <div className="preorder-fullmenu-panel">
+              <div className="preorder-action-bar">
+                <button
+                  type="button"
+                  id="browse-full-menu-btn"
+                  className="btn btn-primary browse-menu-btn"
+                  onClick={() => setIsMenuModalOpen(true)}
+                  aria-label="Browse full restaurant menu and add dishes to reservation"
+                >
+                  <span className="btn-icon" aria-hidden="true">📖</span>
+                  <span>Browse Full Menu &amp; Add Dishes</span>
+                  {Object.values(selectedDishes).reduce((a, b) => a + b, 0) > 0 && (
+                    <span className="btn-badge">
+                      {Object.values(selectedDishes).reduce((a, b) => a + b, 0)} items
+                    </span>
+                  )}
+                </button>
+                <span className="preorder-menu-hint">
+                  {Object.keys(selectedDishes).length === 0
+                    ? 'Explore 20 signature dishes across Starters, Mains, Pastas, Seafood &amp; Desserts.'
+                    : `${Object.values(selectedDishes).reduce((a, b) => a + b, 0)} dish${
+                        Object.values(selectedDishes).reduce((a, b) => a + b, 0) === 1 ? '' : 'es'
+                      } selected`}
+                </span>
               </div>
+
+              {/* Itemized Selected Dishes List */}
+              {Object.keys(selectedDishes).some((id) => selectedDishes[id] > 0) ? (
+                <div className="preorder-selected-summary">
+                  <div className="selected-summary-header">
+                    <h4>Pre-ordered Dishes for Your Table</h4>
+                    <button
+                      type="button"
+                      className="edit-selection-link"
+                      onClick={() => setIsMenuModalOpen(true)}
+                    >
+                      + Add / Modify Dishes
+                    </button>
+                  </div>
+
+                  <div className="selected-dishes-list">
+                    {Object.entries(selectedDishes)
+                      .filter(([_, qty]) => qty > 0)
+                      .map(([id, qty]) => {
+                        const dish = MENU_ITEMS.find((d) => String(d.id) === String(id));
+                        if (!dish) return null;
+                        return (
+                          <div key={dish.id} className="selected-dish-row">
+                            <img
+                              src={dish.image}
+                              alt={dish.name}
+                              className="selected-dish-thumb"
+                              loading="lazy"
+                            />
+                            <div className="selected-dish-info">
+                              <span className="selected-dish-name">{dish.name}</span>
+                              <span className="selected-dish-unitprice">
+                                {dish.price} each · {dish.category}
+                              </span>
+                            </div>
+                            <div className="selected-dish-stepper">
+                              <button
+                                type="button"
+                                className="stepper-btn"
+                                onClick={() => handleUpdateDishQuantity(dish.id, qty - 1)}
+                                aria-label={`Decrease ${dish.name} quantity`}
+                              >
+                                −
+                              </button>
+                              <span className="stepper-count">{qty}</span>
+                              <button
+                                type="button"
+                                className="stepper-btn"
+                                onClick={() => handleUpdateDishQuantity(dish.id, qty + 1)}
+                                aria-label={`Increase ${dish.name} quantity`}
+                              >
+                                +
+                              </button>
+                            </div>
+                            <div className="selected-dish-subtotal">
+                              {formatCurrency(dish.priceNumber * qty)}
+                            </div>
+                            <button
+                              type="button"
+                              className="selected-dish-remove"
+                              onClick={() => handleUpdateDishQuantity(dish.id, 0)}
+                              aria-label={`Remove ${dish.name}`}
+                              title="Remove dish"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
+                  </div>
+
+                  <div className="selected-summary-footer">
+                    <div className="summary-payment-notice">
+                      <span className="notice-icon" aria-hidden="true">ℹ️</span>
+                      <span>
+                        <strong>Payment at Restaurant:</strong> Pre-ordered food is prepared fresh for your arrival. No payment is taken now; charges are added to your final dining check.
+                      </span>
+                    </div>
+                    <div className="selected-summary-total">
+                      <span>Food Pre-Order Subtotal:</span>
+                      <strong>
+                        {formatCurrency(
+                          Object.entries(selectedDishes).reduce((sum, [id, qty]) => {
+                            const dish = MENU_ITEMS.find((d) => String(d.id) === String(id));
+                            return sum + (dish ? dish.priceNumber * qty : 0);
+                          }, 0)
+                        )}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="preorder-empty-prompt">
+                  <p>You haven't added any dishes yet. Click <strong>"Browse Full Menu &amp; Add Dishes"</strong> above to select food, or switch to <em>"Reserve a Table Only"</em> if you prefer to order at the restaurant.</p>
+                </div>
+              )}
             </div>
           )}
+
+          {/* Full Menu Modal Component */}
+          <ReservationMenuModal
+            isOpen={isMenuModalOpen}
+            onClose={() => setIsMenuModalOpen(false)}
+            selectedItems={selectedDishes}
+            onUpdateQuantity={handleUpdateDishQuantity}
+          />
         </div>
       </div>
 

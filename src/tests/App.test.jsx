@@ -15,10 +15,10 @@ describe('Multi-Page Application & Routing Flow', () => {
   it('renders homepage with user logo, hero, featured dishes, and navigation', () => {
     render(<App />);
 
-    // Logo image from reference
+    // Logo image from reference present in header and footer
     expect(
-      screen.getByAltText(/Little Lemon Mediterranean Kitchen Logo/i)
-    ).toBeInTheDocument();
+      screen.getAllByAltText(/Little Lemon Mediterranean Kitchen Logo/i).length
+    ).toBeGreaterThanOrEqual(1);
 
     // Main Hero
     expect(

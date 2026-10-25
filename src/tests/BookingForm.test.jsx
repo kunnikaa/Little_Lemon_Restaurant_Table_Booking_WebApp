@@ -172,4 +172,96 @@ describe('BookingForm Component', () => {
     expect(submitBtn).toBeDisabled();
     expect(submitBtn).toHaveTextContent(/Processing Reservation/i);
   });
+
+  it('submits a Table-Only reservation without requiring any food pre-orders', async () => {
+    const user = userEvent.setup();
+    render(
+      <BookingForm
+        availableTimes={mockTimes}
+        dispatchTimes={mockDispatchTimes}
+        onSubmitBooking={mockOnSubmitBooking}
+      />
+    );
+
+    await user.type(screen.getByLabelText(/Full Name/i), 'Sophia Taylor');
+    await user.type(screen.getByLabelText(/Email Address/i), 'sophia@example.com');
+    await user.type(screen.getByLabelText(/Phone Number/i), '3125550199');
+
+    // Confirm "Reserve a Table Only" is selected by default
+    const tableOnlyRadio = screen.getByRole('radio', { name: /Reserve a Table Only/i });
+    expect(tableOnlyRadio).toBeChecked();
+
+    const submitBtn = screen.getByRole('button', { name: /Reserve Your Table/i });
+    await user.click(submitBtn);
+
+    expect(mockOnSubmitBooking).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fullName: 'Sophia Taylor',
+        bookingChoice: 'table_only',
+        preOrderedDishes: [],
+        preOrderSubtotal: 0,
+      })
+    );
+  });
+
+  it('allows user to choose Table + Pre-order Food, browse full menu modal, and attach dishes', async () => {
+    const user = userEvent.setup();
+    render(
+      <BookingForm
+        availableTimes={mockTimes}
+        dispatchTimes={mockDispatchTimes}
+        onSubmitBooking={mockOnSubmitBooking}
+      />
+    );
+
+    await user.type(screen.getByLabelText(/Full Name/i), 'Liam Wilson');
+    await user.type(screen.getByLabelText(/Email Address/i), 'liam@example.com');
+    await user.type(screen.getByLabelText(/Phone Number/i), '3125550200');
+
+    // Switch to Table + Pre-order Food
+    const tableFoodRadio = screen.getByRole('radio', { name: /Reserve a Table \+ Pre-order Food/i });
+    await user.click(tableFoodRadio);
+    expect(tableFoodRadio).toBeChecked();
+
+    // Prominent "Browse Full Menu & Add Dishes" button should appear
+    const browseBtn = screen.getByRole('button', { name: /Browse full restaurant menu/i });
+    expect(browseBtn).toBeInTheDocument();
+
+    // Click to open full menu modal
+    await user.click(browseBtn);
+
+    // Modal should be open with menu categories and search
+    expect(screen.getByRole('dialog', { name: /Browse Full Menu/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Search dishes/i)).toBeInTheDocument();
+
+    // Add Classic Greek Village Salad to pre-order
+    const addGreekSaladBtn = screen.getByRole('button', { name: /Add Classic Greek Village Salad/i });
+    await user.click(addGreekSaladBtn);
+
+    // Close modal via Done button
+    const doneBtn = screen.getByRole('button', { name: /Done & Return to Reservation/i });
+    await user.click(doneBtn);
+
+    // Itemized summary should now be displayed in booking form
+    expect(screen.getByText('Pre-ordered Dishes for Your Table')).toBeInTheDocument();
+    expect(screen.getByText('Classic Greek Village Salad')).toBeInTheDocument();
+    expect(screen.getByText(/Payment at Restaurant/i)).toBeInTheDocument();
+
+    // Submit booking with attached food
+    const submitBtn = screen.getByRole('button', { name: /Reserve Your Table/i });
+    await user.click(submitBtn);
+
+    expect(mockOnSubmitBooking).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fullName: 'Liam Wilson',
+        bookingChoice: 'table_and_food',
+        preOrderedDishes: expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Classic Greek Village Salad',
+            quantity: 1,
+          }),
+        ]),
+      })
+    );
+  });
 });

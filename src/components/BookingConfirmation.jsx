@@ -109,14 +109,44 @@ export default function BookingConfirmation({ bookingDetails, onReset }) {
           )}
 
           {bookingDetails.preOrderedDishes && bookingDetails.preOrderedDishes.length > 0 && (
-            <div className="confirmation-item" style={{ gridColumn: '1 / -1', borderTop: '1px dashed var(--color-muted-sage)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
-              <span className="confirmation-item-label">Pre-Selected Dishes (Dine-in Pre-Order)</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.35rem' }}>
+            <div className="confirmation-item confirmation-preorder-section" style={{ gridColumn: '1 / -1', borderTop: '1px dashed var(--color-muted-sage)', paddingTop: '1rem', marginTop: '0.75rem' }}>
+              <span className="confirmation-item-label" style={{ marginBottom: '0.5rem', display: 'block' }}>
+                Pre-Ordered Dishes (Dine-in Kitchen Order)
+              </span>
+              <div className="confirmation-preorder-list">
                 {bookingDetails.preOrderedDishes.map((dish, i) => (
-                  <span key={i} className="attach-dish-chip">
-                    {dish.quantity}× {dish.name} ({formatCurrency(dish.price * dish.quantity)})
-                  </span>
+                  <div key={dish.id || i} className="confirmation-preorder-row">
+                    {dish.image && (
+                      <img src={dish.image} alt={dish.name} className="confirmation-dish-thumb" />
+                    )}
+                    <div className="confirmation-dish-info">
+                      <strong>{dish.name}</strong>
+                      <small>{dish.category ? `${dish.category} · ` : ''}{formatCurrency(dish.price)} each</small>
+                    </div>
+                    <span className="confirmation-dish-qty">Qty: {dish.quantity}</span>
+                    <span className="confirmation-dish-subtotal">
+                      {formatCurrency(dish.subtotal || dish.price * dish.quantity)}
+                    </span>
+                  </div>
                 ))}
+              </div>
+              <div className="confirmation-preorder-summary">
+                <div className="preorder-payment-clarification">
+                  <span aria-hidden="true">💡</span>
+                  <span><strong>Payment Note:</strong> Food pre-orders are billed directly on your table check at the restaurant. No upfront charges were made.</span>
+                </div>
+                <div className="preorder-total-badge">
+                  <span>Pre-Order Subtotal:</span>
+                  <strong>
+                    {formatCurrency(
+                      bookingDetails.preOrderSubtotal ||
+                      bookingDetails.preOrderedDishes.reduce(
+                        (sum, d) => sum + (d.subtotal || d.price * d.quantity),
+                        0
+                      )
+                    )}
+                  </strong>
+                </div>
               </div>
             </div>
           )}

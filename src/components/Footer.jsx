@@ -9,11 +9,12 @@ export default function Footer() {
           {/* Brand Info with Logo */}
           <div className="footer-brand">
             <img
-              src="/images/little-lemon-logo-cropped.png"
-              alt="Little Lemon Mediterranean Kitchen"
+              src="/images/little-lemon-footer-logo.png"
+              alt="Little Lemon Mediterranean Kitchen Logo"
               className="footer-logo-img"
-              width="180"
-              height="60"
+              width="220"
+              height="63"
+              loading="lazy"
             />
             <p style={{ marginTop: '1rem' }}>
               Traditional Mediterranean cuisine prepared with love, passion, and heritage.
