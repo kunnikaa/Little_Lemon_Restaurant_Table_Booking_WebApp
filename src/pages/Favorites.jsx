@@ -143,11 +143,10 @@ export default function Favorites() {
               </div>
               <h2 className="empty-heading">No favorite dishes yet</h2>
               <p className="empty-body">
-                Browse our Mediterranean menu and click the heart icon on any dish to save it
-                here for fast, personalized access!
+                Explore our menu and save your favorite dishes for quick access.
               </p>
               <Link to="/menu" className="btn btn-primary empty-menu-cta">
-                Explore Full Menu →
+                Explore Menu →
               </Link>
             </div>
           )}

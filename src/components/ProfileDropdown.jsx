@@ -206,7 +206,7 @@ export default function ProfileDropdown({ onNavigate }) {
                     onClick={handleLinkClick}
                   >
                     <span className="menu-icon" aria-hidden="true">❤️</span>
-                    <span>View Saved Dishes</span>
+                    <span>My Favorites</span>
                     {favoritesCount > 0 && (
                       <span className="profile-badge">{favoritesCount}</span>
                     )}
